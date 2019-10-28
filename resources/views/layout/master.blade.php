@@ -22,7 +22,17 @@
 
         <div class="row">
 
-            @yield('content')
+            <div class="col-md-8 blog-main">
+
+                <h3 class="pb-3 mb-4 font-italic border-bottom">
+
+                    @yield('content_title', \Illuminate\Support\Facades\View::yieldContent('title'))
+
+                </h3>
+
+                @yield('content')
+
+            </div>
 
             @include('layout.sidebar')
 
