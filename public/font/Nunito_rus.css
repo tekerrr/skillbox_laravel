@@ -1,0 +1,16 @@
+/* rus */
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 200;
+    src: local('Nunito ExtraLight'), local('Nunito-ExtraLight'), url(/font/Nunito-ExtraLight.ttf);
+    unicode-range: U+0400-04FF;
+}
+/* rus */
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 600;
+    src: local('Nunito SemiBold'), local('Nunito-SemiBold'), url(/font/Nunito-SemiBold.ttf);
+    unicode-range: U+0400-04FF;
+}
