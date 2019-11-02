@@ -9,7 +9,12 @@ Route::view('/contacts', 'contacts');
 Route::view('/admin', 'admin.index');
 
 Route::resource('posts', 'PostsController');
-Route::resource('tasks', 'TasksController');
 
 Route::get('/admin/feedback', 'FeedbackController@index');
 Route::post('/admin/feedback', 'FeedbackController@store');
+
+Route::resource('tasks', 'TasksController');
+Route::patch('/steps/{step}', 'TaskStepsController@update');
+
+Route::post('/completed-steps/{step}', 'CompletedStepsController@store');
+Route::delete('/completed-steps/{step}', 'CompletedStepsController@destroy');

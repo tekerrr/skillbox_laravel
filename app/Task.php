@@ -18,4 +18,14 @@ class Task extends Model
     {
         return $query->where('completed', false);
     }
+
+    public function steps()
+    {
+        return $this->hasMany(Step::class);
+    }
+
+    public function addStep(array $attributes)
+    {
+        return $this->steps()->create($attributes);
+    }
 }
