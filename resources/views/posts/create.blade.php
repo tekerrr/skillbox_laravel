@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'Создание статью')
+@section('title', 'Создание статьи')
 
 @section('content')
 
