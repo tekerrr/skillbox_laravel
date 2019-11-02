@@ -2,8 +2,10 @@
 
 namespace App;
 
-class Post extends Model
+class Post extends \Illuminate\Database\Eloquent\Model
 {
+    protected $fillable = ['slug', 'title', 'abstract', 'body', 'published'];
+
     public function getRouteKeyName()
     {
         return 'slug';

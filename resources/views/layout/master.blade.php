@@ -34,7 +34,7 @@
 
             </div>
 
-            @include('layout.sidebar')
+{{--            @include('layout.sidebar')--}}
 
         </div>
 
