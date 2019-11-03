@@ -5,6 +5,8 @@
 @section('content')
     <p class="blog-post-meta">{{ $task->created_at->toformattedDateString() }}</p>
 
+    @include('tasks.tags', ['tags' => $task->tags])
+
     {{ $task->body }}
 
     @if ($task->steps->isNotEmpty())

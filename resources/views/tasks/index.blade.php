@@ -3,10 +3,9 @@
 @section('title', 'Задачи')
 
 @section('content')
-    <ul>
-        @foreach($tasks as $task)
-            <li><a href="/tasks/{{ $task->id }}">{{ $task->title }}</a> </li>
-        @endforeach
-    </ul>
+    @foreach($tasks as $task)
+        @include('tasks.item')
+    @endforeach
+
     <a href="/tasks/create">Создать задачу</a>
 @endsection
