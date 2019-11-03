@@ -1,12 +1,8 @@
 <?php
 
-app()->bind(\App\PriceFormatter::class, function () {
-    return new \App\OtherPriceFormatter();
-});
+Route::get('/test', 'TestController@index');
 
-Route::get('/test', function (\App\PriceFormatter $formatter) {
-    dd($formatter->format(10000));
-});
+
 
 Route::get('/', function () {
     return redirect('/posts');
