@@ -18,6 +18,7 @@ Route::post('/admin/feedback', 'FeedbackController@store');
 Route::get('/tasks/tags/{tag}', 'TagsController@index');
 
 Route::resource('tasks', 'TasksController');
+Route::post('/tasks/{task}/steps', 'TaskStepsController@store');
 Route::patch('/steps/{step}', 'TaskStepsController@update');
 
 Route::post('/completed-steps/{step}', 'CompletedStepsController@store');

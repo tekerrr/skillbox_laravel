@@ -25,6 +25,8 @@
 
     <main role="main" class="container">
 
+        @include('layout.flash_message')
+
         <div class="row">
 
             @section('body')

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TaskCreated;
 use App\Tag;
 use App\Task;
 use Illuminate\Support\Collection;
@@ -40,7 +41,11 @@ class TasksController extends Controller
 
         $attributes['owner_id'] = auth()->id();
 
-        Task::create($attributes);
+        $task = Task::create($attributes);
+
+        flash('Задача успешно создана');
+
+//        event(new TaskCreated($task));
 
         return redirect('/tasks');
     }
@@ -96,12 +101,16 @@ class TasksController extends Controller
 
         $task->tags()->sync($syncIds);
 
+        flash('Задача успешно обновлена');
+
         return redirect('/tasks');
     }
 
     public function destroy(Task $task)
     {
         $task->delete();
+
+        flash('Задача удалена', 'warning');
 
         return redirect('tasks');
     }

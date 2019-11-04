@@ -8,11 +8,25 @@ class Task extends Model
 {
     protected $fillable = ['title', 'body', 'owner_id'];
 
+    protected $dispatchesEvents = [
+        'created' => \App\Events\TaskCreated::class
+    ];
+
+//    protected static function boot()
+//    {
+//        parent::boot();
+//
+//        static::created(function ($task) {
+//            \Mail::to($task->owner->email)->send(
+//                new TaskCreated($task)
+//            );
+//        });
+//    }
+
     public function getRouteKeyName()
     {
         return 'id';
     }
-
 
     public function scopeIncomplete($query)
     {
@@ -32,5 +46,10 @@ class Task extends Model
     public function addStep(array $attributes)
     {
         return $this->steps()->create($attributes);
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class);
     }
 }
