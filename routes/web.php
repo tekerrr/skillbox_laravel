@@ -1,9 +1,5 @@
 <?php
 
-Route::get('/test', 'TestController@index');
-
-
-
 Route::get('/', function () {
     return redirect('/posts');
 });
@@ -26,4 +22,7 @@ Route::patch('/steps/{step}', 'TaskStepsController@update');
 
 Route::post('/completed-steps/{step}', 'CompletedStepsController@store');
 Route::delete('/completed-steps/{step}', 'CompletedStepsController@destroy');
+
+
+Auth::routes();
 

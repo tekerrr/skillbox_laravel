@@ -54,8 +54,10 @@
 
     @include('layout.errors')
 
-    <hr>
-    <a href="/tasks/{{ $task->id }}/edit">Редактировать</a>
+    @can('update', $task)
+        <hr>
+        <a href="/tasks/{{ $task->id }}/edit">Редактировать</a>
+    @endcan
 
     <hr>
     <a href="/tasks">Вернуться к списку задач</a>

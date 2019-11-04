@@ -27,19 +27,23 @@
 
         <div class="row">
 
-            <div class="col-md-8 blog-main">
+            @section('body')
+                <div class="col-md-8 blog-main">
 
-                <h3 class="pb-3 mb-4 font-italic border-bottom">
+                    <h3 class="pb-3 mb-4 font-italic border-bottom">
 
-                    @yield('content_title', \Illuminate\Support\Facades\View::yieldContent('title'))
+                        @yield('content_title', \Illuminate\Support\Facades\View::yieldContent('title'))
 
-                </h3>
+                    </h3>
 
-                @yield('content')
+                    @yield('content')
 
-            </div>
+                </div>
+            @show
 
-            @include('layout.sidebar')
+            @section('sidebar')
+                @include('layout.sidebar')
+            @show
 
         </div>
 

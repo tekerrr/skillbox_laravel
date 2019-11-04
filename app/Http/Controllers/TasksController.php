@@ -4,14 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Tag;
 use App\Task;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 
 class TasksController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('can:update,task')->except(['index', 'store', 'create']);
+    }
+
     public function index()
     {
-        $tasks = Task::with('tags')->latest()->get();
+        $tasks = auth()->user()->tasks()->with('tags')->latest()->get();
 
         return view('tasks.index', compact('tasks'));
     }
@@ -33,6 +38,8 @@ class TasksController extends Controller
             'body' => 'required',
         ]);
 
+        $attributes['owner_id'] = auth()->id();
+
         Task::create($attributes);
 
         return redirect('/tasks');
@@ -40,6 +47,17 @@ class TasksController extends Controller
 
     public function edit(Task $task)
     {
+        // abort_if
+        // abort_unless
+
+        // abort_if(\Gate::denies('update', $task), 403)
+        // abort_unless(\Gate::allows('update', $task), 403)
+
+        // abort_if(auth()->user()->cannot('update', $task), 403)
+        // abort_unless(auth()->user()->can('update', $task), 403)
+
+//        $this->authorize('update', $task);
+
         return view('tasks.edit', compact('task'));
     }
 
