@@ -31,19 +31,23 @@
             <label for="inputBody">Детальное описание стати</label>
             <textarea class="form-control" id="inputBody" rows="3" name="body">{{ old('body', $post->body) }}</textarea>
         </div>
-        <div class="form-check mb-3">
+        <div class="form-group form-check">
             <input class="form-check-input" type="checkbox" id="checkboxPublished" value="1"
                    name="published"  {{ (old('published') || (!old('_token') && $post->published)) ? 'checked' : '' }}>
             <label class="form-check-label" for="checkboxPublished">Опубликовано</label>
         </div>
-        <button type="submit" class="btn btn-primary">Обновить статью</button>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Обновить</button>
+        </div>
     </form>
 
     <form method="POST" action="/posts/{{ $post->slug }}">
         @csrf
         @method('DELETE')
 
-        <button type="submit" class="btn btn-danger my-3">Удалить статью</button>
+        <div class="form-group">
+            <button type="submit" class="btn btn-outline-danger">Удалить</button>
+        </div>
     </form>
 
 @endsection

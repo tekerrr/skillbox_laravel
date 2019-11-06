@@ -32,12 +32,14 @@
             <label for="inputBody">Детальное описание стати</label>
             <textarea class="form-control" id="inputBody" rows="3" name="body">{{ old('body') }}</textarea>
         </div>
-        <div class="form-check mb-3">
+        <div class="form-group form-check">
             <input class="form-check-input" type="checkbox" id="checkboxPublished" value="1"
                    name="published" {{ old('published') ? 'checked' : '' }}>
             <label class="form-check-label" for="checkboxPublished">Опубликовано</label>
         </div>
-        <button type="submit" class="btn btn-primary">Создать статью</button>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Создать статью</button>
+        </div>
     </form>
 
 @endsection
