@@ -4,6 +4,8 @@ namespace App;
 
 class Post extends Model
 {
+    protected $fillable = ['slug', 'title', 'abstract', 'body', 'published'];
+
     public function getRouteKeyName()
     {
         return 'slug';

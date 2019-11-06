@@ -7,6 +7,8 @@
     {{ $post->body }}
 
     <hr>
+    <a href="/posts/{{ $post->slug }}/edit">Редактировать</a>
 
+    <hr>
     <a href="/">Вернуться к списку статей</a>
 @endsection
