@@ -32,6 +32,12 @@
             <label for="inputBody">Детальное описание стати</label>
             <textarea class="form-control" id="inputBody" rows="3" name="body">{{ old('body') }}</textarea>
         </div>
+        <div class="form-group">
+            <label for="inputTags">Теги </label>
+            <input type="text" class="form-control" id="inputTags" placeholder="Введите теги (разделитель &quot;, &quot;)"
+                   name="tags"
+                   value="{{ old('tags') }}">
+        </div>
         <div class="form-group form-check">
             <input class="form-check-input" type="checkbox" id="checkboxPublished" value="1"
                    name="published" {{ old('published') ? 'checked' : '' }}>

@@ -36,7 +36,9 @@
                 </div>
             @show
 
-
+            @section('sidebar')
+                @include('layout.sidebar')
+            @show
 
         </div>
 

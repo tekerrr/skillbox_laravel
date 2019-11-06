@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Tag;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
 
 class PostController extends Controller
@@ -21,7 +23,7 @@ class PostController extends Controller
 
     public function store()
     {
-        $this->validate(request(), [
+        $attributes = $this->validate(request(), [
             'slug' => [
                 'required' ,
                 'regex:/^[\w\-]+$/',
@@ -32,7 +34,15 @@ class PostController extends Controller
             'body' => 'required',
         ]);
 
-        Post::create(request()->all());
+        $attributes['published'] = request()->has('published');
+        $post = Post::create($attributes);
+
+        $newTags = collect(explode(', ', request('tags')))->keyBy(function ($item) { return $item; });
+
+        foreach ($newTags as $tag) {
+            $tag = Tag::firstOrCreate(['name' => $tag]);
+            $post->tags()->attach($tag);
+        }
 
         return redirect('/posts');
     }
@@ -62,6 +72,22 @@ class PostController extends Controller
 
         $attributes['published'] = request()->has('published');
         $post->update($attributes);
+
+        /** @var Collection $currentTags */
+        $currentTags = $post->tags->keyBy('name');
+        $newTags = collect(explode(', ', request('tags')))->keyBy(function ($item) { return $item; });
+
+        $tagsToAttach = $newTags->diffKeys($currentTags);
+        $tagsToDetach = $currentTags->diffKeys($newTags);
+
+        foreach ($tagsToAttach as $tag) {
+            $tag = Tag::firstOrCreate(['name' => $tag]);
+            $post->tags()->attach($tag);
+        }
+
+        foreach ($tagsToDetach as $tag) {
+            $post->tags()->detach($tag);
+        }
 
         return redirect('/posts');
     }

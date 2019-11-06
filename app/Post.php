@@ -15,4 +15,10 @@ class Post extends Model
     {
         return $query->where('published', true);
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class)->orderBy('name');
+    }
+
 }

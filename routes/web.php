@@ -2,6 +2,8 @@
 
 Route::redirect('/', '/posts');
 
+Route::get('/posts/tags/{tag}', 'TagController@index');
+
 Route::resource('posts', 'PostController');
 
 Route::view('/about', 'about');
