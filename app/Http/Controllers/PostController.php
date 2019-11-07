@@ -44,6 +44,8 @@ class PostController extends Controller
             $post->tags()->attach($tag);
         }
 
+        flash('Статья успешно создана');
+
         return redirect('/posts');
     }
 
@@ -89,12 +91,16 @@ class PostController extends Controller
             $post->tags()->detach($tag);
         }
 
+        flash('Статья успешно отредактирована');
+
         return redirect('/posts');
     }
 
     public function destroy(Post $post)
     {
         $post->delete();
+
+        flash('Статья удалена', 'danger');
 
         return redirect('/posts');
     }

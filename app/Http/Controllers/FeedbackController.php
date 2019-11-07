@@ -24,6 +24,8 @@ class FeedbackController extends Controller
 
         Feedback::create(request()->all());
 
-        return redirect('/');
+        flash('Сообщение отправлено');
+
+        return redirect('/contacts');
     }
 }
