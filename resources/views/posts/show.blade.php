@@ -3,7 +3,9 @@
 @section('title', $post->title)
 @section('content_title')
     {{ $post->title }}
-    <a href="/posts/{{ $post->slug }}/edit">Редактировать</a>
+    @can('update', $post)
+        <a href="/posts/{{ $post->slug }}/edit">Редактировать</a>
+    @endcan
 @endsection
 
 @section('content')

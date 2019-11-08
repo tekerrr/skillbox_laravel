@@ -9,6 +9,13 @@ use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->only(['create', 'store']);
+        $this->middleware('can:update,post')->only(['edit', 'update']);
+        $this->middleware('can:delete,post')->only('destroy');
+    }
+
     public function index()
     {
         $posts = Post::published()->latest()->get();
@@ -35,6 +42,8 @@ class PostController extends Controller
         ]);
 
         $attributes['published'] = request()->has('published');
+        $attributes['owner_id'] = auth()->id();
+
         $post = Post::create($attributes);
 
         $newTags = collect(explode(', ', request('tags')))->keyBy(function ($item) { return $item; });
