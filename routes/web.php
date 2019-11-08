@@ -14,5 +14,3 @@ Route::get('/admin/feedback', 'FeedbackController@index');
 Route::post('/admin/feedback', 'FeedbackController@store');
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
