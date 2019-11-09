@@ -6,6 +6,12 @@ class Post extends Model
 {
     protected $fillable = ['owner_id', 'slug', 'title', 'abstract', 'body', 'published'];
 
+    protected $dispatchesEvents = [
+        'created' => \App\Events\PostCreated::class,
+        'updated' => \App\Events\PostUpdated::class,
+        'deleted' => \App\Events\PostDeleted::class,
+    ];
+
     public function getRouteKeyName()
     {
         return 'slug';
