@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
@@ -52,4 +53,31 @@ class Task extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function isCompleted(): bool
+    {
+        return (bool) $this->completed;
+    }
+
+    public function isNotCompleted(): bool
+    {
+        return ! $this->isCompleted();
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new class($models) extends Collection {
+            public function allCompleted()
+            {
+                return $this->filter->isCompleted();
+            }
+
+            public function allNotCompleted()
+            {
+                return $this->filter->isNotCompleted();
+            }
+        };
+    }
+
+
 }
