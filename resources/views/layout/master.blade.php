@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', 'Skillbox Laravel')</title>
 
@@ -17,13 +18,17 @@
             text-decoration: line-through;
         }
     </style>
+    <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
 </head>
 
 <body>
 
 @include('layout.nav')
 
-    <main role="main" class="container">
+    <main role="main" class="container" id="app">
+        <div class="row">
+            <example-component></example-component>
+        </div>
 
         @include('layout.flash_message')
 
@@ -52,6 +57,8 @@
     </main>
 
     @include('layout.footer')
-
+    <script src="{{ mix ('/js/manifest.js') }}"></script>
+    <script src="{{ mix('/js/vendor.js') }}"></script>
+    <script src="{{ mix('/js/app.js') }}"></script>
 </body>
 </html>
