@@ -26,6 +26,26 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+
+        if (app()->environment() == 'local') {
+            return;
+        }
+
+        $schedule->command('app:say_hello', [
+            '--subject' => 'Привет из расписания',
+        ])
+            ->environments(['local'])
+            ->everyMinute()
+            ->when(function () {
+                return true;
+            })
+            ->withoutOverlapping('60')
+            ->runInBackground()
+            ->sendOutputTo($path ?? '/')
+            ->emailOutputTo('test@test.ro')
+            ->before(function () {})
+            ->after(function () {})
+        ;
     }
 
     /**

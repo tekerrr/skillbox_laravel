@@ -26,9 +26,9 @@
 @include('layout.nav')
 
     <main role="main" class="container" id="app">
-        <div class="row">
-            <example-component></example-component>
-        </div>
+{{--        <div class="row">--}}
+{{--            <example-component></example-component>--}}
+{{--        </div>--}}
 
         @include('layout.flash_message')
 
