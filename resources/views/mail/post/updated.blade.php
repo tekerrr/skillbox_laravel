@@ -1,5 +1,5 @@
 @component('mail::message')
-# Изменена! статья: {{ $post->title }}
+# Изменена статья: {{ $post->title }}
 
 {{ $post->abstract }}
 
