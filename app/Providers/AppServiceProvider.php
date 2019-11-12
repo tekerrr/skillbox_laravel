@@ -39,6 +39,6 @@ class AppServiceProvider extends ServiceProvider
             $view->with('tagsCloud', \App\Tag::tagsCloud());
         });
 
-
+        \App\Post::observe(\App\Observers\PostObserver::class);
     }
 }
