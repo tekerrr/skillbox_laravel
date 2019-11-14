@@ -4,6 +4,8 @@ namespace App;
 
 class Post extends Model
 {
+    protected $fillable = ['owner_id', 'slug', 'title', 'abstract', 'body', 'published'];
+
     public function getRouteKeyName()
     {
         return 'slug';
@@ -13,4 +15,10 @@ class Post extends Model
     {
         return $query->where('published', true);
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class)->orderBy('name');
+    }
+
 }

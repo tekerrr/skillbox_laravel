@@ -1,12 +1,21 @@
 @extends('layout.master')
 
 @section('title', $post->title)
+@section('content_title')
+    {{ $post->title }}
+    @can('update', $post)
+        <a href="/posts/{{ $post->slug }}/edit">Редактировать</a>
+    @endcan
+@endsection
 
 @section('content')
-    <p class="blog-post-meta">{{ $post->created_at->toformattedDateString() }}</p>
-    {{ $post->body }}
+    <div class="blog-post">
+        @include('tags.items', ['tags' => $post->tags])
 
-    <hr>
+        <p class="blog-post-meta">{{ $post->created_at->toformattedDateString() }}</p>
+        {{ $post->body }}
 
-    <a href="/">Вернуться к списку статей</a>
+        <hr>
+        <a href="/">Вернуться к списку статей</a>
+    </div>
 @endsection

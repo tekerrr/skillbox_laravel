@@ -12,5 +12,7 @@
         <label for="inputBody">Сообщение</label>
         <textarea class="form-control" id="inputBody" rows="3" name="body"></textarea>
     </div>
-    <button type="submit" class="btn btn-primary">Отправить</button>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </div>
 </form>

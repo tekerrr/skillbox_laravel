@@ -23,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        \View::composer('layout.sidebar', function ($view) {
+            $view->with('tagsCloud', \App\Tag::tagsCloud());
+        });
+
+        \App\Post::observe(\App\Observers\PostObserver::class);
     }
 }
