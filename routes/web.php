@@ -13,6 +13,8 @@ Route::resource('posts', 'PostsController');
 Route::get('/admin/feedback', 'FeedbackController@index');
 Route::post('/admin/feedback', 'FeedbackController@store');
 
+Route::view('/demo', 'demo');
+
 
 
 Route::get('/tasks/tags/{tag}', 'TagsController@index');

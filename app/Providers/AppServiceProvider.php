@@ -33,5 +33,16 @@ class AppServiceProvider extends ServiceProvider
         \View::composer('layout.sidebar', function ($view) {
             $view->with('tagsCloud', \App\Tag::tagsCloud());
         });
+
+        \Blade::component('components.alert', 'alert');
+
+        // Объявление новой директивый
+        \Blade::directive('datetime', function ($value) {
+            return "<?php echo ($value)->toFormattedDateString() ?>";
+        });
+
+        \Blade::if('env', function ($env) {
+            return app()->environment($env);
+        });
     }
 }

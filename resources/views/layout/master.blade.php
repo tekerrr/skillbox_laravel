@@ -32,6 +32,22 @@
 
         @include('layout.flash_message')
 
+{{--        @component('components.alert', ['type' => 'success'])--}}
+{{--            @slot('title')--}}
+{{--                Ууууупс--}}
+{{--            @endslot--}}
+
+{{--            <b>Что-то</b> пошло не так--}}
+{{--        @endcomponent--}}
+
+{{--        @alert(['type' => 'success'])--}}
+{{--            @slot('title')--}}
+{{--                Ууууупс--}}
+{{--            @endslot--}}
+
+{{--            <b>Что-то</b> пошло не так--}}
+{{--        @endalert--}}
+
         <div class="row">
 
             @section('body')
