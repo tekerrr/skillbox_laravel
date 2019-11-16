@@ -31,3 +31,6 @@ Auth::routes();
 Route::middleware('auth')->post('/companies', function () {
     auth()->user()->company()->create(request()->validate(['name' => 'required']));
 });
+
+Route::get('/service', 'PushServiceController@form');
+Route::post('/service', 'PushServiceController@send');
