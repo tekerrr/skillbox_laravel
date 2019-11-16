@@ -41,4 +41,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class, 'owner_id');
     }
+
+    public function company()
+    {
+        return $this->hasOne(Company::class, 'owner_id');
+    }
 }

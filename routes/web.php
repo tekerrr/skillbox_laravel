@@ -26,6 +26,8 @@ Route::patch('/steps/{step}', 'TaskStepsController@update');
 Route::post('/completed-steps/{step}', 'CompletedStepsController@store');
 Route::delete('/completed-steps/{step}', 'CompletedStepsController@destroy');
 
-
 Auth::routes();
 
+Route::middleware('auth')->post('/companies', function () {
+    auth()->user()->company()->create(request()->validate(['name' => 'required']));
+});
