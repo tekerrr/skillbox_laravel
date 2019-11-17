@@ -17,12 +17,12 @@ class FeedbackController extends Controller
 
     public function store()
     {
-        $this->validate(request(), [
+        $attributes = request()->validate([
             'email' => 'email',
             'body'  => 'required',
         ]);
 
-        Feedback::create(request()->all());
+        Feedback::create($attributes);
 
         flash('Сообщение отправлено');
 
