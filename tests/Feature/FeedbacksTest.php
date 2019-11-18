@@ -11,11 +11,29 @@ class FeedbacksTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testAnyoneCanViewIndexPage()
+    public function testAdminCanViewIndexPage()
     {
+        $this->actingAs(factory(\App\User::class)->create()->addRole('admin'));
+
         $response = $this->get('/admin/feedback');
 
         $response->assertViewIs('admin.feedback');
+    }
+
+    public function testUserCannotViewIndexPage()
+    {
+        $this->actingAs(factory(\App\User::class)->create());
+
+        $response = $this->get('/admin/feedback');
+
+        $response->assertStatus(403);
+    }
+
+    public function testGuestCanViewIndexPage()
+    {
+        $response = $this->get('/admin/feedback');
+
+        $response->assertStatus(403);
     }
 
     public function testAnyoneCanCreateAPost()

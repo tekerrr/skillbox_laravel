@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -45,6 +44,13 @@ class User extends Authenticatable
     public function hasRole(string $role): bool
     {
         return $this->roles()->where('role', $role)->exists();
+    }
+
+    public function addRole(string $role): User
+    {
+        $this->roles()->attach(\App\Role::firstOrCreate(['role' => $role]));
+
+        return $this;
     }
 
     public function isSuperAdmin(): bool

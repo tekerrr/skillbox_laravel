@@ -17,24 +17,42 @@ class BasicRoutesTest extends TestCase
         $response->assertRedirect('/posts');
     }
 
-    public function testAboutRoute()
+    public function testAnyoneViewGetAboutPage()
     {
         $response = $this->get('/about');
 
         $response->assertViewIs('about');
     }
 
-    public function testContactsRoute()
+    public function testAnyoneCanViewContactsPage()
     {
         $response = $this->get('/contacts');
 
         $response->assertViewIs('contacts');
     }
 
-    public function testAdminRoute()
+    public function testAdminCanViewAdminPage()
     {
+        $this->actingAs(factory(\App\User::class)->create()->addRole('admin'));
+
         $response = $this->get('/admin');
 
         $response->assertViewIs('admin.index');
+    }
+
+    public function testUserCannotViewAdminPage()
+    {
+        $this->actingAs(factory(\App\User::class)->create());
+
+        $response = $this->get('/admin');
+
+        $response->assertStatus(403);
+    }
+
+    public function testGuestCannotViewAdminPage()
+    {
+        $response = $this->get('/admin');
+
+        $response->assertStatus(403);
     }
 }
