@@ -15,13 +15,13 @@ class CreateRolesTable extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 20)->unique();
+            $table->string('role', 20)->unique();
             $table->timestamps();
         });
 
         DB::table('roles')->insert([
-            ['id' => 1, 'name' => 'superAdmin'],
-            ['id' => 2, 'name' => 'admin'],
+            ['id' => 1, 'role' => 'super_admin'],
+            ['id' => 2, 'role' => 'admin'],
         ]);
     }
 

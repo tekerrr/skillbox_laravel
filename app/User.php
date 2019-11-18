@@ -41,4 +41,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class);
     }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->roles()->where('role', 'super_admin')->exists();
+    }
 }
