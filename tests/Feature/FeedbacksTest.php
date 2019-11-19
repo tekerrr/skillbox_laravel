@@ -33,7 +33,7 @@ class FeedbacksTest extends TestCase
     {
         $response = $this->get('/admin/feedback');
 
-        $response->assertStatus(403);
+        $response->assertRedirect('/login');
     }
 
     public function testAnyoneCanCreateAPost()

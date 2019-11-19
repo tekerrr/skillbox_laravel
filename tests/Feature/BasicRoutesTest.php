@@ -53,6 +53,6 @@ class BasicRoutesTest extends TestCase
     {
         $response = $this->get('/admin');
 
-        $response->assertStatus(403);
+        $response->assertRedirect('/login');
     }
 }
