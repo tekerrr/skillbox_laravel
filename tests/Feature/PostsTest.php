@@ -107,7 +107,8 @@ class PostsTest extends TestCase
     public function testAUserCanUpdateHisPost()
     {
         $this->actingAs($user = factory(User::class)->create());
-        $attributes = factory(Post::class)->create(['owner_id' => $user])->getAttributes();
+        $attributes = factory(Post::class)->raw(['owner_id' => $user]);
+        Post::create($attributes);
 
         $attributes['title'] = $this->faker->words(3, true);
         $this->patch('/posts/' . $attributes['slug'], $attributes);
@@ -138,7 +139,8 @@ class PostsTest extends TestCase
     public function testAUserCanDeleteHisPost()
     {
         $this->actingAs($user = factory(User::class)->create());
-        $attributes = factory(Post::class)->create(['owner_id' => $user])->getAttributes();
+        $attributes = factory(Post::class)->raw(['owner_id' => $user]);
+        Post::craete($attributes);
 
         $this->delete('/posts/' . $attributes['slug']);
 
