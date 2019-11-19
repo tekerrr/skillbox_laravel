@@ -140,7 +140,7 @@ class PostsTest extends TestCase
     {
         $this->actingAs($user = factory(User::class)->create());
         $attributes = factory(Post::class)->raw(['owner_id' => $user]);
-        Post::craete($attributes);
+        Post::create($attributes);
 
         $this->delete('/posts/' . $attributes['slug']);
 
