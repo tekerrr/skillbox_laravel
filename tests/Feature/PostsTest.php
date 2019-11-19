@@ -101,7 +101,7 @@ class PostsTest extends TestCase
         $post = factory(Post::class)->create();
         $response = $this->get('/posts/' . $post->slug . '/edit');
 
-        $response->assertStatus(403);
+        $response->assertRedirect('/login');
     }
 
     public function testAUserCanUpdateHisPost()
@@ -133,7 +133,7 @@ class PostsTest extends TestCase
 
         $response = $this->patch('/posts/' . $post->slug, []);
 
-        $response->assertStatus(403);
+        $response->assertRedirect('/login');
     }
 
     public function testAUserCanDeleteHisPost()
@@ -164,6 +164,6 @@ class PostsTest extends TestCase
 
         $response = $this->delete('/posts/' . $post->slug);
 
-        $response->assertStatus(403);
+        $response->assertRedirect('/login');
     }
 }
