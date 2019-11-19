@@ -1,4 +1,4 @@
-@extends('layout.master')
+@extends('layout.master_without_sidebar')
 
 @section('title', 'Список обращений')
 
