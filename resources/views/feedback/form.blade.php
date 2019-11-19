@@ -1,6 +1,6 @@
 @include('layout.errors')
 
-<form method="post" action="/admin/feedback">
+<form method="post" action="/feedback">
 
     @csrf
 

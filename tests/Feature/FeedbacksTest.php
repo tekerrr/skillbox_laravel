@@ -40,7 +40,7 @@ class FeedbacksTest extends TestCase
     {
         $attributes = factory(Feedback::class)->raw();
 
-        $this->post('/admin/feedback', $attributes);
+        $this->post('/feedback', $attributes);
 
         $this->assertDatabaseHas((new Feedback())->getTable(), $attributes);
     }
