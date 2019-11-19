@@ -12,6 +12,6 @@ $factory->define(Post::class, function (Faker $faker) {
         'slug'      => \Illuminate\Support\Str::slug($title, '_'),
         'abstract'  => $faker->sentence,
         'body'      => $faker->text,
-        'published' => true,
+        'is_active' => true,
     ];
 });

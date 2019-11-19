@@ -20,7 +20,7 @@ class CreatePostsTable extends Migration
             $table->string('title', 100);
             $table->string('abstract', 255);
             $table->text('body');
-            $table->boolean('published')->default(false);
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
 
             // TODO удалить ли вместо с пользователем статьти?

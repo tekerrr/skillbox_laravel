@@ -14,10 +14,10 @@ class PostTest extends TestCase
     public function testSelectedOnlyPublishedPosts()
     {
         $publishedPostNumber = 2;
-        factory(Post::class, $publishedPostNumber)->create(['published' => true]);
-        factory(Post::class)->create(['published' => false]);
+        factory(Post::class, $publishedPostNumber)->create(['is_active' => true]);
+        factory(Post::class)->create(['is_active' => false]);
 
-        $posts = Post::published();
+        $posts = Post::active();
 
         $this->assertEquals($posts->count(), $publishedPostNumber);
     }
@@ -30,5 +30,19 @@ class PostTest extends TestCase
         $post->tags()->attach($tag);
 
         $this->assertEquals($tag->name, $post->tags->first()->name);
+    }
+
+    public function testActivePostCanBeDefinedAsActive()
+    {
+        $post = factory(Post::class)->create(['is_active' => true]);
+
+        $this->assertTrue($post->isActive());
+    }
+
+    public function testInactivePostCannotBeDefinedAsActive()
+    {
+        $post = factory(Post::class)->create(['is_active' => false]);
+
+        $this->assertFalse($post->isActive());
     }
 }

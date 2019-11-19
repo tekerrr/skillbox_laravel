@@ -55,4 +55,6 @@ class BasicRoutesTest extends TestCase
 
         $response->assertRedirect('/login');
     }
+
+
 }

@@ -14,4 +14,18 @@ class PostController extends Controller
 
         return view('admin.posts', compact('posts'));
     }
+
+    public function activate(Post $post)
+    {
+        $post->update(['is_active' => true]);
+
+        return back();
+    }
+
+    public function deactivate(Post $post)
+    {
+        $post->update(['is_active' => false]);
+
+        return back();
+    }
 }

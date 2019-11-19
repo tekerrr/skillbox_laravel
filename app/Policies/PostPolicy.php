@@ -19,7 +19,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        return $post->owner_id == $user->id;
+        return $post->owner_id == $user->id || $user->isAdmin();
     }
 
     /**
@@ -31,6 +31,6 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        return $post->owner_id == $user->id;
+        return $post->owner_id == $user->id || $user->isAdmin();
     }
 }

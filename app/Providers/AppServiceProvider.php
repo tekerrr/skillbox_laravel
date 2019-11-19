@@ -28,5 +28,9 @@ class AppServiceProvider extends ServiceProvider
         });
 
         \App\Post::observe(\App\Observers\PostObserver::class);
+
+        \Blade::if('admin', function () {
+            return auth()->user() && auth()->user()->isAdmin();
+        });
     }
 }
