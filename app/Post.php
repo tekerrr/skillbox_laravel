@@ -21,6 +21,20 @@ class Post extends \Illuminate\Database\Eloquent\Model
         return $this->is_active;
     }
 
+    public function activate()
+    {
+        $this->update(['is_active' => true]);
+
+        return $this;
+    }
+
+    public function deactivate()
+    {
+        $this->update(['is_active' => false]);
+
+        return $this;
+    }
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class)->orderBy('name');

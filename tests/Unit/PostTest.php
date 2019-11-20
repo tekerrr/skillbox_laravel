@@ -45,4 +45,22 @@ class PostTest extends TestCase
 
         $this->assertFalse($post->isActive());
     }
+
+    public function testAPostCanBeActivated()
+    {
+        $post = factory(Post::class)->create(['is_active' => false]);
+
+        $post->activate();
+
+        $this->assertTrue($post->isActive());
+    }
+
+    public function testAPostCanBeDeactivated()
+    {
+        $post = factory(Post::class)->create(['is_active' => true]);
+
+        $post->deactivate();
+
+        $this->assertFalse($post->isActive());
+    }
 }

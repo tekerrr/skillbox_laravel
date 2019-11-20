@@ -17,14 +17,14 @@ class PostController extends Controller
 
     public function activate(Post $post)
     {
-        $post->update(['is_active' => true]);
+        $post->activate();
 
         return back();
     }
 
     public function deactivate(Post $post)
     {
-        $post->update(['is_active' => false]);
+        $post->deactivate();
 
         return back();
     }
