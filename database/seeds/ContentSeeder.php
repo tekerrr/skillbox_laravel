@@ -1,0 +1,25 @@
+<?php
+
+use Illuminate\Database\Seeder;
+
+class ContentSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $users = factory(\App\User::class, 5)->create();
+        $tags = factory(\App\Tag::class, 30)->create();
+
+        $users->each(function (\App\User $user) use ($tags) {
+            $posts = factory(\App\Post::class, 5)->create(['owner_id' => $user]);
+
+            $posts->each(function (\App\Post $post) use ($tags) {
+                $post->tags()->attach($tags->random(rand(1, 5)));
+            });
+        });
+    }
+}
