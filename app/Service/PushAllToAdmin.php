@@ -19,6 +19,10 @@ class PushAllToAdmin
 
     public function send($title, $text)
     {
+        if (app()->environment('testing')) {
+            return null;
+        }
+
         $data = [
             'type'  => 'self',
             'id'    => $this->id,
