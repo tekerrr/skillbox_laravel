@@ -15,8 +15,6 @@ class PostObserver
     public function created(Post $post)
     {
         \Mail::to(config('admin.email'))->send(new \App\Mail\PostCreated($post));
-
-        push_all_to_admin('Новая статья', 'Добавлена статья ' . $post->title);
     }
 
     /**
@@ -28,6 +26,8 @@ class PostObserver
     public function updated(Post $post)
     {
         \Mail::to(config('admin.email'))->send(new \App\Mail\PostUpdated($post));
+
+        push_all_to_admin('Новая статья', 'Добавлена статья ' . $post->title);
     }
 
     /**
