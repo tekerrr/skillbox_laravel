@@ -11,56 +11,102 @@ class PostTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testSelectedOnlyPublishedPosts()
+    /** @test */
+    public function method_active_returns_only_published_posts()
     {
+        // Arrange
         $publishedPostNumber = 2;
         factory(Post::class, $publishedPostNumber)->create(['is_active' => true]);
         factory(Post::class)->create(['is_active' => false]);
 
+        // Act
         $posts = Post::active();
 
+        // Assert
         $this->assertEquals($posts->count(), $publishedPostNumber);
     }
 
-    public function testAPostCanHasTags()
+    /** @test */
+    public function a_post_can_have_tags()
     {
+        // Arrange
         $post = factory(Post::class)->create();
-        $tag = factory(\App\Tag::class)->create();
+        $tags = factory(\App\Tag::class, 2)->create();
 
-        $post->tags()->attach($tag);
+        // Act
+        $post->tags()->attach($tags);
 
-        $this->assertEquals($tag->name, $post->tags->first()->name);
+        // Assert
+        $this->assertTrue($post->tags()->where('name', $tags->first()->name)->exists());
+        $this->assertTrue($post->tags()->where('name', $tags->last()->name)->exists());
     }
 
-    public function testActivePostCanBeDefinedAsActive()
+    /** @test */
+    public function post_tags_are_selected_in_alphabetical_order()
     {
+        // Arrange
+        $post = factory(Post::class)->create();
+        $post->tags()->saveMany([
+            factory(\App\Tag::class)->make(['name' => 'ZZZ']),
+            factory(\App\Tag::class)->make(['name' => 'AAA']),
+        ]);
+
+        // Act
+        $tags = $post->tags;
+
+        // Assert
+        $this->assertEquals('AAA', $tags->first()->name);
+    }
+
+    /** @test */
+    public function an_active_post_is_defined_as_active()
+    {
+        // Arrange
         $post = factory(Post::class)->create(['is_active' => true]);
 
-        $this->assertTrue($post->isActive());
+        // Act
+        $response = $post->isActive();
+
+        // Assert
+        $this->assertTrue($response);
     }
 
-    public function testInactivePostCannotBeDefinedAsActive()
+    /** @test */
+    public function an_inactive_post_is_not_defined_as_active()
     {
+        // Arrange
         $post = factory(Post::class)->create(['is_active' => false]);
 
-        $this->assertFalse($post->isActive());
+        // Act
+        $response = $post->isActive();
+
+        // Assert
+        $this->assertFalse($response);
     }
 
-    public function testAPostCanBeActivated()
+    /** @test */
+    public function a_post_can_be_activated()
     {
+        // Arrange
         $post = factory(Post::class)->create(['is_active' => false]);
 
+        // Act
         $post->activate();
 
+        // Assert
         $this->assertTrue($post->isActive());
     }
 
-    public function testAPostCanBeDeactivated()
+    /** @test */
+    public function a_post_can_be_deactivated()
     {
+        // Arrange
         $post = factory(Post::class)->create(['is_active' => true]);
 
+        // Act
         $post->deactivate();
 
+        // Assert
         $this->assertFalse($post->isActive());
     }
 }

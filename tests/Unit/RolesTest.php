@@ -11,13 +11,18 @@ class RolesTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testARoleCanHasAUser()
+    /** @test */
+    public function a_role_can_have_users()
     {
+        // Arrange
         $role = factory(Role::class)->create();
-        $user = factory(\App\User::class)->create();
+        $users = factory(\App\User::class, 2)->create();
 
-        $role->users()->attach($user);
+        // Act
+        $role->users()->attach($users);
 
-        $this->assertEquals($user->name, $role->users->first()->name);
+        // Assert
+        $this->assertEquals($users->first()->name, $role->users->first()->name);
+        $this->assertEquals($users->last()->name, $role->users->last()->name);
     }
 }
