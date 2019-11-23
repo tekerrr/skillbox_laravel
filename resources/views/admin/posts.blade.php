@@ -1,6 +1,6 @@
 @extends('layout.master_without_sidebar')
 
-@section('title', 'Список обращений')
+@section('title', 'Список статей')
 
 @section('content')
     <table class="table">
