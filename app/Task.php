@@ -4,25 +4,44 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Task extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = ['title', 'body', 'owner_id'];
 
     protected $dispatchesEvents = [
         'created' => \App\Events\TaskCreated::class
     ];
 
-//    protected static function boot()
-//    {
-//        parent::boot();
-//
-//        static::created(function ($task) {
-//            \Mail::to($task->owner->email)->send(
-//                new TaskCreated($task)
-//            );
-//        });
-//    }
+    protected $attributes = [
+        'type' => 'new',
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope('onlyNew', function (\Illuminate\Database\Eloquent\Builder $builder) {
+            $builder->where('type', 'new');
+        });
+    }
+
+    protected $appends = [
+        'double_type',
+    ];
+
+    public function getTypeAttribute($value)
+    {
+        return ucfirst($value);
+    }
+
+    public function getDoubleTypeAttribute()
+    {
+        return str_repeat($this->type, 2);
+    }
+
 
     public function getRouteKeyName()
     {
@@ -32,6 +51,16 @@ class Task extends Model
     public function scopeIncomplete($query)
     {
         return $query->where('completed', false);
+    }
+
+    public function scopeOfType($query, $type)
+    {
+        return $query->where('type', $type);
+    }
+
+    public function scopeNew($query)
+    {
+        return $query->ofType('new');
     }
 
     public function steps()
@@ -78,6 +107,4 @@ class Task extends Model
             }
         };
     }
-
-
 }
