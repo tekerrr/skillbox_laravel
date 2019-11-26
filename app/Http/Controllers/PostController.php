@@ -11,21 +11,21 @@ class PostController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->only(['create', 'store']);
+        $this->middleware('auth')->except(['index', 'show']);
         $this->middleware('can:update,post')->only(['edit', 'update']);
         $this->middleware('can:delete,post')->only('destroy');
     }
 
     public function index()
     {
-        $posts = Post::published()->latest()->get();
+        $posts = Post::active()->latest()->get();
 
         return view('posts.index', compact('posts'));
     }
 
     public function create()
     {
-        return view('/posts.create');
+        return view('posts.create');
     }
 
     public function store()
@@ -41,7 +41,7 @@ class PostController extends Controller
             'body' => 'required',
         ]);
 
-        $attributes['published'] = request()->has('published');
+        $attributes['is_active'] = request()->has('is_active');
         $attributes['owner_id'] = auth()->id();
 
         $post = Post::create($attributes);
@@ -81,7 +81,7 @@ class PostController extends Controller
             'body'     => 'required',
         ]);
 
-        $attributes['published'] = request()->has('published');
+        $attributes['is_active'] = request()->has('is_active');
         $post->update($attributes);
 
         /** @var Collection $currentTags */

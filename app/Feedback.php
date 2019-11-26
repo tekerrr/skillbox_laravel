@@ -2,7 +2,7 @@
 
 namespace App;
 
-class Feedback extends Model
+class Feedback extends \Illuminate\Database\Eloquent\Model
 {
-
+    protected $fillable = ['email', 'body'];
 }

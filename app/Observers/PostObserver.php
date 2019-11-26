@@ -26,6 +26,8 @@ class PostObserver
     public function updated(Post $post)
     {
         \Mail::to(config('admin.email'))->send(new \App\Mail\PostUpdated($post));
+
+        push_all_to_admin('Статья изменена', 'Изменена статья ' . $post->title);
     }
 
     /**

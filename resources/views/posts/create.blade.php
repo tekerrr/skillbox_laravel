@@ -39,9 +39,9 @@
                    value="{{ old('tags') }}">
         </div>
         <div class="form-group form-check">
-            <input class="form-check-input" type="checkbox" id="checkboxPublished" value="1"
-                   name="published" {{ old('published') ? 'checked' : '' }}>
-            <label class="form-check-label" for="checkboxPublished">Опубликовано</label>
+            <input class="form-check-input" type="checkbox" id="checkboxActive" value="1"
+                   name="is_active" {{ old('is_active') ? 'checked' : '' }}>
+            <label class="form-check-label" for="checkboxActive">Опубликовать</label>
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Создать статью</button>

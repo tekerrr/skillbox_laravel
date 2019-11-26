@@ -26,8 +26,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        $gate->before(function ($user) {
-            if ($user->id == config('admin.id')) {
+        $gate->before(function (\App\User $user) {
+            if ($user->isSuperAdmin()) {
                 return true;
             }
         });

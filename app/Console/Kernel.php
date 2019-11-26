@@ -24,11 +24,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command('send:new-posts 7')->weeklyOn(1, '12:00');
     }
 
-    /**
+    /**g
      * Register the commands for the application.
      *
      * @return void

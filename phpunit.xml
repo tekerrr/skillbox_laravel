@@ -13,8 +13,12 @@
             <directory suffix="Test.php">./tests/Unit</directory>
         </testsuite>
 
-        <testsuite name="Feature">
-            <directory suffix="Test.php">./tests/Feature</directory>
+        <testsuite name="Feature\Common">
+            <directory suffix="Test.php">./tests/Feature/Common</directory>
+        </testsuite>
+
+        <testsuite name="Feature\Admin">
+            <directory suffix="Test.php">./tests/Feature/Admin</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -29,5 +33,8 @@
         <server name="MAIL_DRIVER" value="array"/>
         <server name="QUEUE_CONNECTION" value="sync"/>
         <server name="SESSION_DRIVER" value="array"/>
+        <server name="TELESCOPE_ENABLED" value="false"/>
+        <server name="DB_CONNECTION" value="sqlite"/>
+        <server name="DB_DATABASE" value=":memory:"/>
     </php>
 </phpunit>

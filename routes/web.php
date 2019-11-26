@@ -2,15 +2,20 @@
 
 Route::redirect('/', '/posts');
 
-Route::get('/posts/tags/{tag}', 'TagController@index');
-
-Route::resource('posts', 'PostController');
+Auth::routes();
 
 Route::view('/about', 'about');
 Route::view('/contacts', 'contacts');
-Route::view('/admin', 'admin.index');
+Route::post('/feedback', 'FeedbackController@store');
 
-Route::get('/admin/feedback', 'FeedbackController@index');
-Route::post('/admin/feedback', 'FeedbackController@store');
+Route::resource('posts', 'PostController');
+Route::get('/posts/tags/{tag}', 'TagController@index');
 
-Auth::routes();
+Route::prefix('/admin')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::view('/', 'admin.index');
+    Route::get('/feedback', 'Admin\FeedbackController@index');
+
+    Route::get('/posts', 'Admin\PostController@index');
+    Route::patch('/posts/{post}/activate', 'Admin\PostController@activate');
+    Route::patch('/posts/{post}/deactivate', 'Admin\PostController@deactivate');
+});
