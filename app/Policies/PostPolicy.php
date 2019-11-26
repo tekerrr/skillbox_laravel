@@ -10,27 +10,20 @@ class PostPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can update the post.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Post  $post
-     * @return mixed
-     */
-    public function update(User $user, Post $post)
+    public function before(User $user)
     {
-        return $post->owner_id == $user->id || $user->isAdmin();
+        if ($user->isAdmin()) {
+            return true;
+        }
     }
 
-    /**
-     * Determine whether the user can delete the post.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Post  $post
-     * @return mixed
-     */
+    public function update(User $user, Post $post)
+    {
+        return $post->owner_id == $user->id;
+    }
+
     public function delete(User $user, Post $post)
     {
-        return $post->owner_id == $user->id || $user->isAdmin();
+        return $post->owner_id == $user->id;
     }
 }

@@ -49,6 +49,7 @@ class PostTest extends TestCase
         $post->tags()->saveMany([
             factory(\App\Tag::class)->make(['name' => 'ZZZ']),
             factory(\App\Tag::class)->make(['name' => 'AAA']),
+            factory(\App\Tag::class)->make(['name' => 'BBB']),
         ]);
 
         // Act
