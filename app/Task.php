@@ -20,28 +20,61 @@ class Task extends Model
         'type' => 'new',
     ];
 
+    protected $dates = [
+        'viewed_at',
+    ];
+
+    // TODO уточнить назначение
+    protected $casts = [
+        'completed' => 'boolean',
+        'options' => 'array',
+        'viewed_at' => 'datetime:Y-m-d',
+    ];
+
     protected static function boot()
     {
         parent::boot();
-        static::addGlobalScope('onlyNew', function (\Illuminate\Database\Eloquent\Builder $builder) {
-            $builder->where('type', 'new');
+
+        static::updating(function (Task $task) {
+            $after = $task->getDirty();
+            $task->history()->attach(auth()->id(), [
+                'before' => json_encode(\Arr::only($task->fresh()->toArray(), array_keys($after))),
+                'after'  => json_encode($after),
+            ]);
         });
     }
+
+
+
+//    protected static function boot()
+//    {
+//        parent::boot();
+//        static::addGlobalScope('onlyNew', function (\Illuminate\Database\Eloquent\Builder $builder) {
+//            $builder->where('type', 'new');
+//        });
+//    }
 
     protected $appends = [
         'double_type',
     ];
 
+    // Accessor
     public function getTypeAttribute($value)
     {
         return ucfirst($value);
     }
 
+    // Accessor
     public function getDoubleTypeAttribute()
     {
         return str_repeat($this->type, 2);
     }
 
+    // Mutator
+    public function setTypeAttribute($value)
+    {
+        $this->attributes['type'] = ucfirst(strtolower($value));
+    }
 
     public function getRouteKeyName()
     {
@@ -106,5 +139,11 @@ class Task extends Model
                 return $this->filter->isNotCompleted();
             }
         };
+    }
+
+    public function history()
+    {
+        return $this->belongsToMany(\App\User::class, 'task_histories')
+            ->withPivot(['before', 'after'])->withTimestamps();
     }
 }

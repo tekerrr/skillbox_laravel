@@ -28,6 +28,11 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+//    protected $visible = [
+//        'id',
+//        'name',
+//    ];
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -44,6 +49,18 @@ class User extends Authenticatable
 
     public function company()
     {
-        return $this->hasOne(Company::class, 'owner_id');
+        return $this->hasOne(Company::class, 'owner_id')->withDefault(['name' => 'No Company']);
+    }
+
+    protected $appends = ['is_admin'];
+
+    public function getIsAdminAttribute()
+    {
+        return (bool) rand (0, 1);
+    }
+
+    public function getIsManagerAttribute()
+    {
+        return (bool) rand (0, 1);
     }
 }

@@ -8,6 +8,8 @@ class Step extends Model
 {
     protected $guarded = [];
 
+    protected $touches = ['task'];
+
     public function task()
     {
         return $this->belongsTo(Task::class);

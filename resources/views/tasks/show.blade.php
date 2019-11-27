@@ -54,6 +54,13 @@
 
     @include('layout.errors')
 
+    <hr>
+    @forelse ($task->history as $item)
+        <p>{{ $item->email }} - {{ $item->pivot->created_at->diffForHumans() }} = {{ $item->pivot->before }} - {{ $item->pivot->after }}</p>
+    @empty
+        <p>Нет истории изменения</p>
+    @endforelse
+
     @can('update', $task)
         <hr>
         <a href="/tasks/{{ $task->id }}/edit">Редактировать</a>
