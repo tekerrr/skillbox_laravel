@@ -35,7 +35,7 @@ Route::middleware('auth')->post('/companies', function () {
 Route::get('/service', 'PushServiceController@form');
 Route::post('/service', 'PushServiceController@send');
 
-Route::get('/test', function () {
+Route::get('/test1', function () {
 //    return \App\User::all()
 ////        ->makeVisible('email')
 ////        ->each->append(['is_manager'])
@@ -64,4 +64,202 @@ Route::get('/test', function () {
 
     $users = \App\User::all();
     return $users->load('tasks');
+});
+
+Route::get('/test', function () {
+//    \DB::connection('other')->select();
+//    \DB::connection('other')->getPdo();
+//    dd(\DB::select('select * from users where id = ?', [1]));
+
+//    \DB::transaction(function () {
+//        // query 1
+//        // query 2
+//        // query 3
+//    });
+//
+//    \DB::beginTransaction();
+//
+//    \DB::rollBack();
+//
+//    \DB::commit();
+
+//    $tasks = \DB::table('tasks')->first();
+//    $tasks = \DB::table('tasks')->where('id', 2)->value('title');
+//    $tasks = \DB::table('tasks')->pluck('title', 'id');
+
+//    $tasks = \DB::table('tasks')
+//        ->orderBy('id')
+////        ->chunk(2, function ($tasks) {
+//        ->chunkById(2, function ($tasks) { // в случае изменения, обновления
+//            dump($tasks);
+////            return false;
+//        })
+//    ;
+
+//    $tasks = \DB::table('tasks')->count();
+//    $tasks = \DB::table('tasks')->max('id');
+//    $tasks = \DB::table('tasks')->average('id');
+
+//    $tasks = \DB::table('tasks')->where('title', '12345')->exists();
+//    $tasks = \DB::table('tasks')->where('title', '12345')->doesntExist();
+
+//    $tasks = \DB::table('tasks')->select('title', 'body')->get();
+//    $tasks = \DB::table('tasks')->select('title')->addSelect('type')->get();
+//    $tasks = \DB::table('tasks')->select('type')->distinct()->get();
+//    $tasks = \DB::table('tasks')->select(\DB::raw('count(*) as task_count, type'))->groupBy('type')->get();
+//    $tasks = \DB::table('tasks')
+//        ->selectRaw('id * ? as big_id', [10])
+//        ->get();
+//    $tasks = \DB::table('tasks')
+//        ->whereRaw('type = IF(id < 3, ?, "New")', ['Old'])
+//        ->get();
+//    $tasks = \DB::table('tasks')
+//        ->select(\DB::raw('count(*) as task_count, type'))
+//        ->groupBy('type')
+//        ->havingRaw('count(*) > ?', [1])
+//        ->get()
+//    ;
+//    $tasks = \DB::table('tasks')
+//        ->orderByRaw('updated_at - created_at')
+//        ->get()
+//    ;
+
+//    $users = \DB::table('users')
+//        ->join('tasks', 'users.id', '=', 'tasks.owner_id')
+////        ->leftJoin('tasks', 'users.id', '=', 'tasks.owner_id')
+////        ->rightJoin('tasks', 'users.id', '=', 'tasks.owner_id')
+////        ->crossJoin('tasks', 'users.id', '=', 'tasks.owner_id')
+//        ->join('companies', 'users.id', '=', 'companies.owner_id')
+//        ->select('users.id', 'users.email', 'tasks.title', 'companies.name')
+//        ->get()
+//    ;
+
+//    $latestTask = DB::table('tasks')
+//        ->select('owner_id', DB::raw('MAX(updated_at) as last_task_updated_at'))
+//        ->where('completed', false)
+//        ->groupBy('owner_id')
+//    ;
+//
+//    $users = DB::table('users')
+//        ->joinSub($latestTask, 'latest_completed_task', function ($join) {
+//            $join->on('users.id', '=', 'latest_completed_task.owner_id');
+//        })
+//        ->get()
+//    ;
+
+//    $firstUser = DB::table('users')->where('id', 1);
+//    $users = DB::table('users')
+//        ->where('id', 2)
+//        ->union($firstUser)
+//        ->get()
+//    ;
+
+//    $tasks = DB::table('tasks')
+//        ->where('type', 'old')
+//        ->where('type', '=', 'old')
+//        ->where('type', '<>', 'old')
+//        ->where('type', '<', 'old')
+//        ->where('type', '<=', 'old')
+//        ->where('type', '>', 'old')
+//        ->where('type', '>=', 'old')
+//        ->where('type', 'like', '%e%')
+//        ->where([
+//            ['type', 'new'],
+//            ['completed', '<>', true],
+//        ])
+//        ->where('type', 'new')->orWhere('type', 'old')
+//        ->whereBetween('id', [2, 4])
+//        ->whereNotBetween('id', [2, 4])
+//        ->whereIn('id', [1, 3, 5])
+//        ->whereNotIn('id', [1, 3, 5])
+//        ->whereNull('options')
+//        ->whereNotNull('options')
+//        ->whereDate('created_ad', '2019-01-01')
+//        ->whereMonth('created_ad', '12')
+//        ->whereDay('created_ad', '31')
+//        ->whereYear('created_ad', '2007')
+//        ->whereTime('created_ad', '11:22:33')
+//        ->whereColumn('updated_at', '>', 'created_at')
+//        ->where('type', 'new')->orWhere(function ($query) {
+//            $query
+//                ->where('type', '<>', 'new')
+//                ->where('completed', true)
+//            ;
+//        })
+//        ->whereExists(function ($query) {
+//            //
+//        })
+//        ->where('options->lang', 'ru') // Json
+//        ->whereJsonContains('options->lang', 'ru') // Json
+//        ->whereJsonLength('options->lang', '>', 1) // Json
+//        ->get()
+//    ;
+
+//    $tasks = DB::table('tasks')
+//        ->orderBy('title', 'asc')
+//        ->orderBy('title', 'desc')
+//        ->orderByDesc('title')
+//        ->latest()
+//        ->oldest()
+//        ->inRandomOrder()
+//        ->get()
+//    ;
+
+//    $tasks = DB::table('tasks') // TODO разобраться!
+//        ->groupBy('id')
+//        ->having('id', '>', 3)
+//        ->select('id', 'type')
+//        ->get()
+//    ;
+
+//    $tasks = DB::table('tasks')
+//        ->skip(2) // offset()
+//        ->take(2) // limit()
+//        ->get()
+//    ;
+
+    $tasks = DB::table('tasks')
+        ->when(\request()->has('old'), function ($query) {
+            $query->where('type', 'old');
+        }, function ($query) {
+            // при невыполнении условия
+        })
+        ->get()
+    ;
+
+//    $tasks = DB::table('companies')
+////        ->insert([
+////            ['name' => 'new Company 1', 'owner_id' => 1],
+////            ['name' => 'new Company 2', 'owner_id' => 1],
+////            ['name' => 'new Company 3', 'owner_id' => 1],
+////        ])
+//        ->insertGetId(['name' => 'new Company 1', 'owner_id' => 1])
+//    ;
+
+//    $tasks = DB::table('companies')
+////        ->update(['owner_id' => 2])
+////        ->updateOrInsert(['name' => 'Test'], ['owner_id' => 2])
+////        ->where('id', 1)->update(['options->color' => 'red'])
+////        ->where('id', 1)->increment('field', 2)
+//        ->where('id', 1)->decrement('field', 2)
+//    ;
+
+//    $tasks = DB::table('companies')
+//        ->where('id', '>=', 2)
+//        ->delete()
+//    ;
+
+    $tasks = DB::table('companies')
+        ->where('id', '>=', 2)
+        ->sharedLock()
+        ->get()
+    ;
+
+    $tasks = DB::table('companies')
+        ->where('id', '>=', 2)
+        ->lockForUpdate()
+        ->update([])
+    ;
+
+    dump($tasks);
 });

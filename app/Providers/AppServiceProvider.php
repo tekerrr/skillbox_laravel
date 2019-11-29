@@ -20,6 +20,10 @@ class AppServiceProvider extends ServiceProvider
                 return \Illuminate\Support\Str::upper($item);
             });
         });
+
+        \DB::listen(function ($query) {
+//            dd($query);
+        });
     }
 
     /**
