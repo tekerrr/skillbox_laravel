@@ -15,7 +15,12 @@ class Tag extends Model
 
     public function tasks()
     {
-        return $this->belongsToMany(Task::class);
+        return $this->morphedByMany(Task::class, 'taggable');
+    }
+
+    public function steps()
+    {
+        return $this->morphedByMany(Step::class, 'taggable');
     }
 
     public static function tagsCloud()

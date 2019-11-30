@@ -31,6 +31,7 @@
                             </label>
                         </div>
                     </form>
+                    @include('tasks.tags', ['tags' => $step->tags])
                 </li>
            @endforeach
         </ul>
@@ -46,6 +47,13 @@
                 placeholder="Шаг"
                 value="{{ old('description') }}"
                 name="description"
+            >
+            <input
+                type="text"
+                class="form-control"
+                placeholder="Теги"
+                value="{{ old('tags') }}"
+                name="tags"
             >
         </div>
         <button type="submit" class="btn btn-primary">Добавить</button>

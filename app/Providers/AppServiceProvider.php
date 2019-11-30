@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
@@ -52,5 +53,10 @@ class AppServiceProvider extends ServiceProvider
 
         Paginator::defaultSimpleView('pagination::simple-default');
 //        Paginator::defaultView('pagination::simple-default');
+
+//        Relation::morphMap([
+//            'tasks' => \App\Task::class,
+//            'steps' => \App\Step::class,
+//        ]);
     }
 }

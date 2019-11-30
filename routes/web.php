@@ -261,10 +261,20 @@ Route::get('/test', function () {
 //        ->update([])
 //    ;
 
-    $tasks = DB::table('tasks')
-//        ->paginate(2)
-        ->simplePaginate(2)
+//    $tasks = DB::table('tasks')
+////        ->paginate(2)
+//        ->simplePaginate(2)
+//    ;
+
+    $images = \App\Image::with('imageable') // TODO подумать!!
+        ->get()
+        ->loadMorph('imageable', [
+            \App\User::class => ['company', 'tasks'],
+            \App\Company::class => ['user'],
+
+        ])
+        ->toArray()
     ;
 
-    dump($tasks);
+    dump($images);
 });
