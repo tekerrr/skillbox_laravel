@@ -8,5 +8,10 @@
 {{--    @endforeach--}}
     @each('tasks.item', $tasks, 'task', 'tasks.empty')
 
+    {{ $tasks->links() }}
+{{--    {{ $tasks->links('pagination.view', ['some' => 'data']) }}--}}
+{{--    {{ $tasks->appends(['sort' => 'title'])->fragment('foobar')->onEachSide(1)->links() }}--}}
+
+
     <a href="/tasks/create">Создать задачу</a>
 @endsection

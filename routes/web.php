@@ -249,16 +249,21 @@ Route::get('/test', function () {
 //        ->delete()
 //    ;
 
-    $tasks = DB::table('companies')
-        ->where('id', '>=', 2)
-        ->sharedLock()
-        ->get()
-    ;
+//    $tasks = DB::table('companies')
+//        ->where('id', '>=', 2)
+//        ->sharedLock()
+//        ->get()
+//    ;
+//
+//    $tasks = DB::table('companies')
+//        ->where('id', '>=', 2)
+//        ->lockForUpdate()
+//        ->update([])
+//    ;
 
-    $tasks = DB::table('companies')
-        ->where('id', '>=', 2)
-        ->lockForUpdate()
-        ->update([])
+    $tasks = DB::table('tasks')
+//        ->paginate(2)
+        ->simplePaginate(2)
     ;
 
     dump($tasks);

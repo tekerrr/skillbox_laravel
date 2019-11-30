@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 
@@ -48,5 +49,8 @@ class AppServiceProvider extends ServiceProvider
         \Blade::if('env', function ($env) {
             return app()->environment($env);
         });
+
+        Paginator::defaultSimpleView('pagination::simple-default');
+//        Paginator::defaultView('pagination::simple-default');
     }
 }
