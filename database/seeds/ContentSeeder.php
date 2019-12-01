@@ -21,5 +21,7 @@ class ContentSeeder extends Seeder
                 $post->tags()->attach($tags->random(rand(1, 5)));
             });
         });
+
+        factory(\App\News::class, 10)->create();
     }
 }

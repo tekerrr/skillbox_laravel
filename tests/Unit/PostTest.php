@@ -12,18 +12,17 @@ class PostTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function method_active_returns_only_published_posts()
+    public function the_class_is_using_can_be_activated_trait_correctly()
     {
         // Arrange
-        $publishedPostNumber = 2;
-        factory(Post::class, $publishedPostNumber)->create(['is_active' => true]);
-        factory(Post::class)->create(['is_active' => false]);
+        $elements = factory(Post::class, 2)->create(['is_active' => false]);
 
         // Act
-        $posts = Post::active();
+        $elements->first()->activate();
 
         // Assert
-        $this->assertEquals($posts->count(), $publishedPostNumber);
+        $this->assertTrue($elements->first()->isActive());
+        $this->assertFalse($elements->last()->isActive());
     }
 
     /** @test */
@@ -57,57 +56,5 @@ class PostTest extends TestCase
 
         // Assert
         $this->assertEquals('AAA', $tags->first()->name);
-    }
-
-    /** @test */
-    public function an_active_post_is_defined_as_active()
-    {
-        // Arrange
-        $post = factory(Post::class)->create(['is_active' => true]);
-
-        // Act
-        $response = $post->isActive();
-
-        // Assert
-        $this->assertTrue($response);
-    }
-
-    /** @test */
-    public function an_inactive_post_is_not_defined_as_active()
-    {
-        // Arrange
-        $post = factory(Post::class)->create(['is_active' => false]);
-
-        // Act
-        $response = $post->isActive();
-
-        // Assert
-        $this->assertFalse($response);
-    }
-
-    /** @test */
-    public function a_post_can_be_activated()
-    {
-        // Arrange
-        $post = factory(Post::class)->create(['is_active' => false]);
-
-        // Act
-        $post->activate();
-
-        // Assert
-        $this->assertTrue($post->isActive());
-    }
-
-    /** @test */
-    public function a_post_can_be_deactivated()
-    {
-        // Arrange
-        $post = factory(Post::class)->create(['is_active' => true]);
-
-        // Act
-        $post->deactivate();
-
-        // Assert
-        $this->assertFalse($post->isActive());
     }
 }

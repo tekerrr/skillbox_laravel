@@ -1,0 +1,42 @@
+@extends('layout.master_without_sidebar')
+
+@section('title', 'Список новостей')
+
+@section('content')
+    <div class="form-group">
+        <a class="btn btn-primary mb-3" href="/admin/news/create">Создать</a>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Заголовок</th>
+            <th scope="col">Дата создания</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Дейсвтие</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($news as $oneNews)
+            <tr>
+                <th scope="row">{{ $oneNews->id }}</th>
+                <td><a href="/news/{{ $oneNews->slug }}">{{ $oneNews->title }}</a></td>
+                <td>{{ $oneNews->created_at->toformattedDateString() }}</td>
+                <td>
+                    <form method="POST" action="/admin/news/{{ $oneNews->slug }}/{{ $oneNews->isActive() ? 'deactivate' : 'activate' }}">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-sm btn-outline-{{ $oneNews->isActive() ? 'danger' : 'primary' }}">
+                            {{ $oneNews->isActive() ? 'Деактивировать' : 'Активировать' }}
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-primary" href="/admin/news/{{ $oneNews->slug }}/edit">Изменить</a>
+                </td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+@endsection
