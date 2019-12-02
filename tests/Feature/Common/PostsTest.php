@@ -199,6 +199,25 @@ class PostsTest extends TestCase
     }
 
     /** @test */
+    public function a_user_can_update_tags_in_his_post()
+    {
+        // Arrange
+        $attributes = factory(Post::class)->raw([
+            'owner_id' => $this->actingAsUser(),
+            'tags' => $oldTagName = $this->faker->unique()->word,
+        ]);
+        Post::create($attributes);
+
+        // Act
+        $attributes['tags'] = $newTagName = $this->faker->unique()->word;
+        $this->patch('/posts/' . $attributes['slug'], $attributes);
+
+        // Assert
+        $this->assertEquals(Post::first()->tags()->first()->name, $newTagName);
+        $this->assertNull(Post::first()->tags()->where('name', $oldTagName)->first());
+    }
+
+    /** @test */
     public function a_user_cannot_update_another_users_post()
     {
         // Arrange

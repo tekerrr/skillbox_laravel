@@ -15,7 +15,7 @@ class Post extends \Illuminate\Database\Eloquent\Model
 
     public function tags()
     {
-        return $this->belongsToMany(Tag::class)->orderBy('name');
+        return $this->morphToMany(Tag::class, 'taggable')->orderBy('name');
     }
 
 }
