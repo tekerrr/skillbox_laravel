@@ -4,6 +4,6 @@
 
 @section('content')
     @foreach($news as $oneNews)
-        @include('news.item')
+        @include('news.item', ['news' => $oneNews])
     @endforeach
 @endsection

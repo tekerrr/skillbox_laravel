@@ -29,7 +29,7 @@
                     </form>
                 </td>
                 <td>
-                    <a class="btn btn-sm btn-primary" href="/posts/{{ $post->slug }}/edit">Изменить</a>
+                    <a class="btn btn-sm btn-outline-primary" href="/posts/{{ $post->slug }}/edit">Изменить</a>
                 </td>
             </tr>
         @endforeach

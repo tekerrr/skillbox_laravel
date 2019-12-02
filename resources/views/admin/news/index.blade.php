@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="form-group">
-        <a class="btn btn-primary mb-3" href="/admin/news/create">Создать</a>
+        <a class="btn btn-outline-primary mb-3" href="/admin/news/create">Создать</a>
     </div>
 
     <table class="table">
@@ -33,7 +33,7 @@
                     </form>
                 </td>
                 <td>
-                    <a class="btn btn-sm btn-primary" href="/admin/news/{{ $oneNews->slug }}/edit">Изменить</a>
+                    <a class="btn btn-sm btn-outline-primary" href="/admin/news/{{ $oneNews->slug }}/edit">Изменить</a>
                 </td>
             </tr>
         @endforeach
