@@ -38,14 +38,10 @@ class NewsController extends Controller
 
         $attributes['is_active'] = request()->has('is_active');
 
-        $news = News::create($attributes);
-
-        $newTags = collect(explode(', ', request('tags')))->keyBy(function ($item) { return $item; });
-
-        foreach ($newTags as $tag) {
-            $tag = Tag::firstOrCreate(['name' => $tag]);
-            $news->tags()->attach($tag);
-        }
+        $news = News::create($attributes)
+            ->tags()
+            ->attach(Tag::getIds(explode(', ', request('tags'))))
+        ;
 
         flash('Новость успешно создана');
 
@@ -77,17 +73,8 @@ class NewsController extends Controller
         $currentTags = $news->tags->keyBy('name');
         $newTags = collect(explode(', ', request('tags')))->keyBy(function ($item) { return $item; });
 
-        $tagsToAttach = $newTags->diffKeys($currentTags);
-        $tagsToDetach = $currentTags->diffKeys($newTags);
-
-        foreach ($tagsToAttach as $tag) {
-            $tag = Tag::firstOrCreate(['name' => $tag]);
-            $news->tags()->attach($tag);
-        }
-
-        foreach ($tagsToDetach as $tag) {
-            $news->tags()->detach($tag);
-        }
+        $news->tags()->attach(Tag::getIds($newTags->diffKeys($currentTags)));
+        $news->tags()->detach(Tag::getIds($currentTags->diffKeys($newTags)));
 
         flash('Новость успешно отредактирована');
 

@@ -6,6 +6,14 @@ class Tag extends \Illuminate\Database\Eloquent\Model
 {
     protected $fillable = ['name'];
 
+    public static function getIds($names)
+    {
+        return collect($names)->map(function ($name) {
+            return Tag::firstOrCreate(['name' => $name])->id;
+        });
+    }
+
+
     public static function tagsCloud()
     {
         return (new static)->has('posts')->orderBy('name')->get();

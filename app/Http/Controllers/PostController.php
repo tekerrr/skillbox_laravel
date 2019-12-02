@@ -44,14 +44,10 @@ class PostController extends Controller
         $attributes['is_active'] = request()->has('is_active');
         $attributes['owner_id'] = auth()->id();
 
-        $post = Post::create($attributes);
-
-        $newTags = collect(explode(', ', request('tags')))->keyBy(function ($item) { return $item; });
-
-        foreach ($newTags as $tag) {
-            $tag = Tag::firstOrCreate(['name' => $tag]);
-            $post->tags()->attach($tag);
-        }
+        $post = Post::create($attributes)
+            ->tags()
+            ->attach(Tag::getIds(explode(', ', request('tags'))))
+        ;
 
         flash('Статья успешно создана');
 
@@ -88,17 +84,8 @@ class PostController extends Controller
         $currentTags = $post->tags->keyBy('name');
         $newTags = collect(explode(', ', request('tags')))->keyBy(function ($item) { return $item; });
 
-        $tagsToAttach = $newTags->diffKeys($currentTags);
-        $tagsToDetach = $currentTags->diffKeys($newTags);
-
-        foreach ($tagsToAttach as $tag) {
-            $tag = Tag::firstOrCreate(['name' => $tag]);
-            $post->tags()->attach($tag);
-        }
-
-        foreach ($tagsToDetach as $tag) {
-            $post->tags()->detach($tag);
-        }
+        $post->tags()->attach(Tag::getIds($newTags->diffKeys($currentTags)));
+        $post->tags()->detach(Tag::getIds($currentTags->diffKeys($newTags)));
 
         flash('Статья успешно отредактирована');
 
