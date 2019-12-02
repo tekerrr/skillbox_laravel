@@ -9,7 +9,7 @@ Route::view('/contacts', 'contacts');
 Route::post('/feedback', 'FeedbackController@store');
 
 Route::resource('posts', 'PostController');
-Route::get('/posts/tags/{tag}', 'TagController@index');
+Route::get('/tags/{tag}', 'TagController@show');
 
 Route::resource('news', 'NewsController')->only(['index', 'show']);
 
