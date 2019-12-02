@@ -101,6 +101,22 @@ class NewsTest extends TestCase
     }
 
     /** @test */
+    public function an_admin_can_create_a_news_with_tags()
+    {
+        // Arrange
+        $this->actingAsAdmin();
+        $attributes = factory(News::class)->raw([
+            'tags' => $tagName = $this->faker->word,
+        ]);
+
+        // Act
+        $this->post('/admin/news', $attributes);
+
+        // Assert
+        $this->assertEquals(News::first()->tags->first()->name, $tagName);
+    }
+
+    /** @test */
     public function a_user_cannot_create_a_news()
     {
         // Arrange
@@ -178,6 +194,25 @@ class NewsTest extends TestCase
 
         // Assert
         $this->assertDatabaseHas((new News())->getTable(), $attributes);
+    }
+
+    /** @test */
+    public function an_admin_can_update_tags_in_a_news()
+    {
+        // Arrange
+        $this->actingAsAdmin();
+        $attributes = factory(News::class)->raw([
+            'tags' => $oldTagName = $this->faker->unique()->word,
+        ]);
+        News::create($attributes);
+
+        // Act
+        $attributes['tags'] = $newTagName = $this->faker->unique()->word;
+        $this->patch('/admin/news/' . $attributes['slug'], $attributes);
+
+        // Assert
+        $this->assertEquals(News::first()->tags()->first()->name, $newTagName);
+        $this->assertNull(News::first()->tags()->where('name', $oldTagName)->first());
     }
 
     /** @test */

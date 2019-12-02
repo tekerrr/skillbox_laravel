@@ -15,7 +15,7 @@
         @include('layout.form.title', ['default' => $news->title])
         @include('layout.form.abstract', ['default' => $news->abstract])
         @include('layout.form.body', ['default' => $news->body])
-        @include('layout.form.tags')
+        @include('layout.form.tags', ['default' => $news->tags->pluck('name')->implode(', ')])
         @include('layout.form.is_active', ['default' => $news->isActive()])
 
         <div class="form-group">

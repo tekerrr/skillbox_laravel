@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\News;
+use App\Tag;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -38,7 +40,12 @@ class NewsController extends Controller
 
         $news = News::create($attributes);
 
-        // TODO add Tags
+        $newTags = collect(explode(', ', request('tags')))->keyBy(function ($item) { return $item; });
+
+        foreach ($newTags as $tag) {
+            $tag = Tag::firstOrCreate(['name' => $tag]);
+            $news->tags()->attach($tag);
+        }
 
         flash('Новость успешно создана');
 
@@ -66,7 +73,21 @@ class NewsController extends Controller
         $attributes['is_active'] = request()->has('is_active');
         $news->update($attributes);
 
-        // TODO add Tags
+        /** @var Collection $currentTags */
+        $currentTags = $news->tags->keyBy('name');
+        $newTags = collect(explode(', ', request('tags')))->keyBy(function ($item) { return $item; });
+
+        $tagsToAttach = $newTags->diffKeys($currentTags);
+        $tagsToDetach = $currentTags->diffKeys($newTags);
+
+        foreach ($tagsToAttach as $tag) {
+            $tag = Tag::firstOrCreate(['name' => $tag]);
+            $news->tags()->attach($tag);
+        }
+
+        foreach ($tagsToDetach as $tag) {
+            $news->tags()->detach($tag);
+        }
 
         flash('Новость успешно отредактирована');
 

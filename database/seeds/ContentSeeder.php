@@ -22,6 +22,8 @@ class ContentSeeder extends Seeder
             });
         });
 
-        factory(\App\News::class, 10)->create();
+        factory(\App\News::class, 10)->create()->each(function (\App\News $news) use ($tags) {
+            $news->tags()->attach($tags->random(rand(1, 5)));
+        });
     }
 }
