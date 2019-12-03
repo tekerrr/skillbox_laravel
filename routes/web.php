@@ -13,6 +13,8 @@ Route::get('/tags/{tag}', 'TagController@show');
 
 Route::resource('news', 'NewsController')->only(['index', 'show']);
 
+Route::resource('comments', 'CommentController')->only('store');
+
 Route::prefix('/admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::view('/', 'admin.index');
     Route::get('/feedback', 'Admin\FeedbackController@index');

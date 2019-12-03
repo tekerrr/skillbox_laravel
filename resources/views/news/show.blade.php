@@ -15,6 +15,8 @@
         <p class="blog-post-meta">{{ $news->created_at->toformattedDateString() }}</p>
         {{ $news->body }}
 
+        @include('comment.index', ['comments' => $news->comments, 'parent' => $news])
+
         <hr>
         <a href="/">Вернуться к списку новостей</a>
     </div>

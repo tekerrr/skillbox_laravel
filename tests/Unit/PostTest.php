@@ -6,10 +6,11 @@ use App\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Tests\WithRoles;
 
 class PostTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithRoles;
 
     /** @test */
     public function the_class_is_using_can_be_activated_trait_correctly()
@@ -23,6 +24,19 @@ class PostTest extends TestCase
         // Assert
         $this->assertTrue($elements->first()->isActive());
         $this->assertFalse($elements->last()->isActive());
+    }
+
+    /** @test */
+    public function a_post_has_a_user()
+    {
+        // Arrange
+        $post = factory(Post::class)->create(['owner_id' => $user = $this->createUser()]);
+
+        // Act
+        $owner = $post->user;
+
+        // Assert
+        $this->assertEquals($owner->name, $user->name);
     }
 
     /** @test */
@@ -56,5 +70,20 @@ class PostTest extends TestCase
 
         // Assert
         $this->assertEquals('AAA', $tags->first()->name);
+    }
+
+    /** @test */
+    public function a_post_can_have_comments()
+    {
+        // Arrange
+        $post = factory(Post::class)->create();
+        $comments = factory(\App\Comment::class, 2)->state('withoutCommentable')->make();
+
+        // Act
+        $post->comments()->saveMany($comments);
+
+        // Assert
+        $this->assertEquals($post->comments->first()->body, $comments->first()->body);
+        $this->assertEquals($post->comments->last()->body, $comments->last()->body);
     }
 }

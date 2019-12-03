@@ -19,4 +19,9 @@ class News extends Model
     {
         return $this->morphToMany(Tag::class, 'taggable')->orderBy('name');
     }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 }

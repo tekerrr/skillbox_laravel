@@ -13,9 +13,19 @@ class Post extends \Illuminate\Database\Eloquent\Model
         return 'slug';
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
     public function tags()
     {
         return $this->morphToMany(Tag::class, 'taggable')->orderBy('name');
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
 }

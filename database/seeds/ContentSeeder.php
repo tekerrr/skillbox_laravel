@@ -19,6 +19,16 @@ class ContentSeeder extends Seeder
 
             $posts->each(function (\App\Post $post) use ($tags) {
                 $post->tags()->attach($tags->random(rand(1, 5)));
+
+                $comments = factory(\App\Comment::class, rand(1, 5))
+                    ->state('empty')
+                    ->make()
+                    ->each(function ($comment) {
+                        $comment->owner_id = \App\User::inRandomOrder()->first()->id;
+                    })
+                ;
+
+                $post->comments()->saveMany($comments);
             });
         });
 

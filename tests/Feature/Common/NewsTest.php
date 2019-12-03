@@ -6,10 +6,11 @@ use App\News;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Tests\WithRoles;
 
 class NewsTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase, WithFaker, WithRoles;
 
     /** @test */
     public function anyone_can_view_the_news_list_page()

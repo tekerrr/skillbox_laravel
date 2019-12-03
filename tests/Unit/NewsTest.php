@@ -57,4 +57,19 @@ class NewsTest extends TestCase
         // Assert
         $this->assertEquals('AAA', $tags->first()->name);
     }
+
+    /** @test */
+    public function a_news_can_have_comments()
+    {
+        // Arrange
+        $news = factory(News::class)->create();
+        $comments = factory(\App\Comment::class, 2)->state('withoutCommentable')->make();
+
+        // Act
+        $news->comments()->saveMany($comments);
+
+        // Assert
+        $this->assertEquals($news->comments->first()->body, $comments->first()->body);
+        $this->assertEquals($news->comments->last()->body, $comments->last()->body);
+    }
 }
