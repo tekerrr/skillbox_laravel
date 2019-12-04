@@ -19,6 +19,6 @@ class FeedbackController extends Controller
 
         flash('Сообщение отправлено');
 
-        return redirect('/contacts');
+        return back();
     }
 }

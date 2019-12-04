@@ -6,7 +6,7 @@
 
     @include('layout.errors')
 
-    <form method="post" action="/admin/news">
+    <form method="post" action="{{ route('admin.news.store') }}">
 
         @csrf
 

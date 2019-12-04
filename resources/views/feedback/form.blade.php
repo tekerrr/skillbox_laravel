@@ -1,6 +1,6 @@
 @include('layout.errors')
 
-<form method="post" action="/feedback">
+<form method="post" action="{{ route('feedback.store') }}">
 
     @csrf
 

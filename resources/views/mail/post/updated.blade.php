@@ -3,7 +3,7 @@
 
 {{ $post->abstract }}
 
-@component('mail::button', ['url' => '/posts/' . $post->slug])
+@component('mail::button', ['url' => route('posts.show', compact('post'))])
 Прочитать статью
 @endcomponent
 

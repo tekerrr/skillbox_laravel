@@ -6,7 +6,7 @@
 
     @include('layout.errors')
 
-    <form method="post" action="/posts">
+    <form method="post" action="{{ route('posts.store') }}">
 
         @csrf
 

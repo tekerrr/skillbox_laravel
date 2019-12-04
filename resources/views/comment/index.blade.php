@@ -9,7 +9,7 @@
 @auth
     @include('layout.errors')
 
-    <form method="post" action="/comments">
+    <form method="post" action="{{ route('comments.store') }}">
 
         @csrf
 

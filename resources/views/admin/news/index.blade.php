@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="form-group">
-        <a class="btn btn-outline-primary mb-3" href="/admin/news/create">Создать</a>
+        <a class="btn btn-outline-primary mb-3" href="{{ route('admin.news.create') }}">Создать</a>
     </div>
 
     <table class="table">
@@ -24,7 +24,7 @@
                 <td><a href="/news/{{ $oneNews->slug }}">{{ $oneNews->title }}</a></td>
                 <td>{{ $oneNews->created_at->toformattedDateString() }}</td>
                 <td>
-                    <form method="POST" action="/admin/news/{{ $oneNews->slug }}/{{ $oneNews->isActive() ? 'deactivate' : 'activate' }}">
+                    <form method="POST" action="{{ route('admin.news.' . ($oneNews->isActive() ? 'deactivate' : 'activate'), ['news' => $oneNews]) }}">
                         @csrf
                         @method('PATCH')
                         <button type="submit" class="btn btn-sm btn-outline-{{ $oneNews->isActive() ? 'danger' : 'primary' }}">
@@ -33,7 +33,7 @@
                     </form>
                 </td>
                 <td>
-                    <a class="btn btn-sm btn-outline-primary" href="/admin/news/{{ $oneNews->slug }}/edit">Изменить</a>
+                    <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.news.edit', ['news' => $oneNews]) }}">Изменить</a>
                 </td>
             </tr>
         @endforeach

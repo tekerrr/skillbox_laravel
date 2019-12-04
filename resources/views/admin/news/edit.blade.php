@@ -6,7 +6,7 @@
 
     @include('layout.errors')
 
-    <form method="POST" action="/admin/news/{{ $news->slug }}">
+    <form method="POST" action="{{ route('admin.news.update', compact('news')) }}">
 
         @csrf
         @method('PATCH')
@@ -23,7 +23,7 @@
         </div>
     </form>
 
-    <form method="POST" action="/admin/news/{{ $news->slug }}">
+    <form method="POST" action="{{ route('admin.news.destroy', compact('news')) }}">
         @csrf
         @method('DELETE')
 

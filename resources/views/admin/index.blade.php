@@ -4,8 +4,9 @@
 
 @section('content')
     <ul>
-        <li><a href="/admin/posts">Список статей</a></li>
-        <li><a href="/admin/news">Список новостей</a></li>
-        <li><a href="/admin/feedback">Список обращений</a></li>
+        <li><a href="{{ route('admin.posts.index') }}">Список статей</a></li>
+        <li><a href="{{ route('admin.news.index') }}">Список новостей</a></li>
+        <li><a href="{{ route('admin.feedback.index') }}">Список обращений</a></li>
+        <li><a href="{{ route('admin.statistics.index') }}">Статистика портала</a></li>
     </ul>
 @endsection

@@ -4,7 +4,7 @@
 @section('content_title')
     {{ $news->title }}
     @admin
-        <a href="/admin/news/">Редактировать</a>
+        <a href="{{ route('admin.news.edit', compact('news')) }}">Редактировать</a>
     @endadmin
 @endsection
 
@@ -18,6 +18,7 @@
         @include('comment.index', ['comments' => $news->comments, 'parent' => $news])
 
         <hr>
-        <a href="/">Вернуться к списку новостей</a>
+        <a href="{{ route('news.index') }}">Вернуться к списку новостей</a>
+
     </div>
 @endsection

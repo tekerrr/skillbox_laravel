@@ -45,7 +45,7 @@ class NewsController extends Controller
 
         flash('Новость успешно создана');
 
-        return redirect('/admin/news');
+        return redirect()->route('admin.news.index');
     }
 
     public function edit(News $news)
@@ -78,7 +78,7 @@ class NewsController extends Controller
 
         flash('Новость успешно отредактирована');
 
-        return redirect('/admin/news');
+        return redirect()->route('admin.news.index');
     }
 
     public function destroy(News $news)
@@ -87,7 +87,7 @@ class NewsController extends Controller
 
         flash('Новость удалена', 'danger');
 
-        return redirect('/admin/news');
+        return redirect()->route('admin.news.index');
     }
 
     public function activate(News $news)

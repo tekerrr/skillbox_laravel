@@ -6,7 +6,7 @@
 
     @include('layout.errors')
 
-    <form method="POST" action="/posts/{{ $post->slug }}">
+    <form method="POST" action="{{ route('posts.update', compact('post')) }}">
 
         @csrf
         @method('PATCH')
@@ -23,7 +23,7 @@
         </div>
     </form>
 
-    <form method="POST" action="/posts/{{ $post->slug }}">
+    <form method="POST" action="{{ route('posts.destroy', compact('post')) }}">
         @csrf
         @method('DELETE')
 

@@ -51,7 +51,7 @@ class PostController extends Controller
 
         flash('Статья успешно создана');
 
-        return redirect('/posts');
+        return redirect()->route('posts.index');
     }
 
     public function show(Post $post)
@@ -91,7 +91,7 @@ class PostController extends Controller
 
         flash('Статья успешно отредактирована');
 
-        return redirect('/posts');
+        return redirect()->route('posts.index');
     }
 
     public function destroy(Post $post)
@@ -100,6 +100,6 @@ class PostController extends Controller
 
         flash('Статья удалена', 'danger');
 
-        return redirect('/posts');
+        return redirect()->route('posts.index');
     }
 }

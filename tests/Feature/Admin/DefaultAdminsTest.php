@@ -24,7 +24,7 @@ class DefaultAdminsTest extends TestCase
     }
 
     /** @test */
-    public function check_default_super_admin() // TODO изменить
+    public function check_default_super_admin()
     {
         // Arrange
         $user = User::where('name', 'Super Admin')->first();

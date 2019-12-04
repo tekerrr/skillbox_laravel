@@ -20,7 +20,7 @@ class PostsTest extends TestCase
 
         // Assert
         $response->assertViewIs('posts.index');
-        $response->assertSeeText('Список публикаци');
+        $response->assertSeeText('Публикации');
     }
 
     /** @test */

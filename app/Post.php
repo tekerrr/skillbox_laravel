@@ -18,7 +18,7 @@ class Post extends \Illuminate\Database\Eloquent\Model
 
         static::updating(function (Post $post) {
             $post->history()->attach(auth()->id(), [
-                'after' => json_encode($after = $post->getDirty()), // TODO проверить getChanged
+                'after' => json_encode($after = $post->getDirty()),
                 'before' => json_encode(Arr::only($post->getOriginal(), array_keys($after))),
             ]);
         });
