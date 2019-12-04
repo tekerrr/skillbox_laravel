@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title', 'Главная')
-@section('content_title', 'Список публикаци')
+@section('content_title', 'Публикации')
 
 @section('content')
     @foreach($posts as $post)
