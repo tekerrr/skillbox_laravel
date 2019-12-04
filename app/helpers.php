@@ -26,5 +26,16 @@ if (! function_exists('push_all_to_admin')) {
 
         return app(\App\Service\PushAllToAdmin::class)->send($title, $text);
     }
-}
+}if(! function_exists('anchor')) {
+    /**
+     * @param string $href
+     * @param string $name
+     * @return string
+     */
+    function anchor(string $href, string $name = '')
+    {
+        $name = $name ?: $href;
 
+        return '<a href="' . $href . '">' . $name . '</a>';
+    }
+}
