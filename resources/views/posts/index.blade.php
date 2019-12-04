@@ -7,4 +7,6 @@
     @foreach($posts as $post)
         @include('posts.item')
     @endforeach
+
+    {{ $posts->links('pagination.view') }}
 @endsection

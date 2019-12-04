@@ -6,4 +6,6 @@
     @foreach($news as $oneNews)
         @include('news.item', ['news' => $oneNews])
     @endforeach
+
+    {{ $news->links('pagination.view') }}
 @endsection
