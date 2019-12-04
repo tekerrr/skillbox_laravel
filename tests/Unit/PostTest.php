@@ -10,7 +10,7 @@ use Tests\WithRoles;
 
 class PostTest extends TestCase
 {
-    use RefreshDatabase, WithRoles;
+    use RefreshDatabase, WithFaker, WithRoles;
 
     /** @test */
     public function the_class_is_using_can_be_activated_trait_correctly()
@@ -85,5 +85,36 @@ class PostTest extends TestCase
         // Assert
         $this->assertEquals($post->comments->first()->body, $comments->first()->body);
         $this->assertEquals($post->comments->last()->body, $comments->last()->body);
+    }
+
+    /** @test */
+    public function a_post_can_have_a_history()
+    {
+        // Arrange
+        $post = factory(Post::class)->create();
+        $history = factory(\App\PostHistory::class)->create(['post_id' => $post]);
+
+        // Act
+        $postHistory = $post->history->first();
+
+        // Assert
+        $this->assertEquals($postHistory->name, \App\User::find($history->user_id)->name);
+        $this->assertEquals($postHistory->pivot->before, $history->before);
+    }
+
+    /** @test */
+    public function a_post_history_stores_changes()
+    {
+        // Arrange
+        $post = factory(Post::class)->create(['owner_id' => $this->actingAsUser()]);
+        $oldTitle = $post->title;
+        $newTitle = $this->faker->words(3, true);
+
+        // Act
+        $post->update(['title' => $newTitle]);
+
+        // Assert
+        $this->assertDatabaseHas((new \App\PostHistory())->getTable(), ['before' => json_encode(['title' => $oldTitle])]);
+        $this->assertDatabaseHas((new \App\PostHistory())->getTable(), ['after' => json_encode(['title' => $newTitle])]);
     }
 }

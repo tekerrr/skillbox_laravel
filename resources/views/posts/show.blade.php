@@ -21,6 +21,8 @@
 
         @include('comment.index', ['comments' => $post->comments, 'parent' => $post])
 
+        @include('history.index', ['history' => $post->history])
+
         <hr>
         <a href="/">Вернуться к списку статей</a>
     </div>
