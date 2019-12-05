@@ -13,6 +13,8 @@ class ContentSeeder extends Seeder
     {
         $users = factory(\App\User::class, 5)->create();
         $tags = factory(\App\Tag::class, 30)->create();
+        $newsTag = factory(\App\Tag::class)->create(['name' => 'новости']);
+
 
         $users->each(function (\App\User $user) use ($tags) {
             $posts = factory(\App\Post::class, 5)->create(['owner_id' => $user]);
@@ -42,8 +44,10 @@ class ContentSeeder extends Seeder
             });
         });
 
-        factory(\App\News::class, 10)->create()->each(function (\App\News $news) use ($tags) {
-            $news->tags()->attach($tags->random(rand(1, 5)));
+        factory(\App\News::class, 10)->create()->each(function (\App\News $news) use ($tags, $newsTag) {
+            $news->tags()->attach($tags->random(rand(1, 3)));
+            $news->tags()->attach($newsTag);
+            $news->tags()->attach(factory(\App\Tag::class)->create());
         });
     }
 }

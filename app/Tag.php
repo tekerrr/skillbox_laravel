@@ -16,7 +16,7 @@ class Tag extends \Illuminate\Database\Eloquent\Model
 
     public static function tagsCloud()
     {
-        return (new static)->has('posts')->orderBy('name')->get();
+        return (new static)->has('posts')->orHas('news')->orderBy('name')->get();
     }
 
     public function posts()

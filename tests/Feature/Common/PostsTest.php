@@ -69,7 +69,7 @@ class PostsTest extends TestCase
     }
 
     /** @test */
-    public function anyone_can_view_tags_history_on_the_post_page()
+    public function anyone_can_view_tags_on_the_post_page()
     {
         // Arrange
         $post = factory(Post::class)->create();

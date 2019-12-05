@@ -27,6 +27,21 @@ class TagTest extends TestCase
     }
 
     /** @test */
+    public function a_tag_can_have_news()
+    {
+        // Arrange
+        $tag = factory(Tag::class)->create();
+        $news = factory(\App\News::class, 2)->create();
+
+        // Act
+        $tag->news()->attach($news);
+
+        // Assert
+        $this->assertEquals($news->first()->title, $tag->news->first()->title);
+        $this->assertEquals($news->last()->title, $tag->news->last()->title);
+    }
+
+    /** @test */
     public function method_tagsCloud_returns_tags()
     {
         // Arrange
@@ -43,18 +58,20 @@ class TagTest extends TestCase
     }
 
     /** @test */
-    public function method_tags_cloud_returns_only_tags_attached_to_posts()
+    public function method_tags_cloud_returns_only_tags_attached_to_posts_or_news()
     {
         // Arrange
-        $tagsNumber = 2;
-        $tags = factory(Tag::class, $tagsNumber)->create();
-        $post = factory(\App\Post::class)->create();
-        $tags->first()->posts()->attach($post);
+        $emptyTags = factory(Tag::class, 2)->create();
+        $tagsWithPosts = factory(Tag::class, 2)->create();
+        $tagsWithNews = factory(Tag::class, 2)->create();
+        $tagsWithPostsAndNews = factory(Tag::class, 2)->create();
+        $post = factory(\App\Post::class)->create()->tags()->attach($tagsWithPosts->merge($tagsWithPostsAndNews));
+        $news = factory(\App\News::class)->create()->tags()->attach($tagsWithNews->merge($tagsWithPostsAndNews));
 
         // Act
         $tagsCloud = Tag::tagsCloud();
 
         // Assert
-        $this->assertEquals($tagsCloud->count(), 1);
+        $this->assertEquals($tagsCloud->count(), 6);
     }
 }
