@@ -46,4 +46,41 @@ class BasicRoutesTest extends TestCase
         // Assert
         $response->assertRedirect('/login');
     }
+
+    /** @test */
+    public function an_admin_can_view_the_admin_statistics_page()
+    {
+        // Arrange
+        $this->actingAsAdmin();
+
+        // Act
+        $response = $this->get('/admin/statistics');
+
+        // Assert
+        $response->assertSeeText('Статистика портала');
+        $response->assertViewIs('admin.statistics');
+    }
+
+    /** @test */
+    public function a_user_cannot_view_the_admin_statistics_page()
+    {
+        // Arrange
+        $this->actingAsUser();
+
+        // Act
+        $response = $this->get('/admin/statistics');
+
+        // Assert
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_guest_cannot_view_the_admin_statistics_page()
+    {
+        // Act
+        $response = $this->get('/admin/statistics');
+
+        // Assert
+        $response->assertRedirect('/login');
+    }
 }
