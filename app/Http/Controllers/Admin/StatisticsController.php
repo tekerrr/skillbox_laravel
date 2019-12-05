@@ -8,6 +8,6 @@ class StatisticsController extends Controller
 {
     public function index()
     {
-        return view('admin.statistics', ['data' => (new \App\Statisctics())->get()]);
+        return view('admin.statistics', ['data' => (new \App\Statistics())->get()]);
     }
 }

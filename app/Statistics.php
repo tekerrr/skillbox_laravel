@@ -4,7 +4,7 @@
 namespace App;
 
 
-class Statisctics
+class Statistics
 {
     private $data = [];
 
