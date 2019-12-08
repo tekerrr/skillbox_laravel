@@ -1,8 +1,11 @@
 <?php
 
 
-namespace App;
+namespace App\Service;
 
+
+use App\News;
+use App\Post;
 
 class Statistics
 {
@@ -35,6 +38,7 @@ class Statistics
     private function checkPosts()
     {
         $averageNumberFromActiveAuthors = Post::selectRaw('count(*) as posts_count')
+            ->having('posts_count', '>', '1')
             ->groupBy('owner_id')
             ->pluck('posts_count')
             ->avg()
