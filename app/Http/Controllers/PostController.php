@@ -102,4 +102,14 @@ class PostController extends Controller
 
         return redirect()->route('posts.index');
     }
+
+    public function addComment(Post $post)
+    {
+        $attributes = $this->validate(request(), ['body' => 'required']);
+        $attributes['owner_id'] = auth()->id();
+
+        $post->comments()->create($attributes);
+
+        return back();
+    }
 }

@@ -26,7 +26,7 @@ class CommentsTest extends TestCase
         $this->actingAsUser();
 
         // Act
-        $this->post('/comments', $attributes);
+        $this->post('/posts/'. $post->slug . '/comments', $attributes);
 
         // Assert
         $this->assertDatabaseHas((new \App\Comment())->getTable(), $attributes);
@@ -44,7 +44,7 @@ class CommentsTest extends TestCase
         ];
 
         // Act
-        $this->post('/comments', $attributes);
+        $this->post('/posts/'. $post->slug . '/comments', $attributes);
 
         // Assert
         $this->assertDatabaseHas((new \App\Comment())->getTable(), $attributes);
@@ -63,10 +63,23 @@ class CommentsTest extends TestCase
         $this->actingAsAdmin();
 
         // Act
-        $this->post('/comments', $attributes);
+        $this->post('/posts/'. $post->slug . '/comments', $attributes);
 
         // Assert
         $this->assertDatabaseHas((new \App\Comment())->getTable(), $attributes);
+    }
+
+    /** @test */
+    public function a_guest_cannot_add_a_comment_to_the_post()
+    {
+        // Arrange
+        $post = factory(Post::class)->create();
+
+        // Act
+        $response = $this->post('/posts/'. $post->slug . '/comments', []);
+
+        // Assert
+        $response->assertRedirect('/login');
     }
 
     /** @test */
@@ -82,7 +95,7 @@ class CommentsTest extends TestCase
         $this->actingAsUser();
 
         // Act
-        $this->post('/comments', $attributes);
+        $this->post('/news/'. $news->slug . '/comments', $attributes);
 
         // Assert
         $this->assertDatabaseHas((new \App\Comment())->getTable(), $attributes);
@@ -101,17 +114,19 @@ class CommentsTest extends TestCase
         $this->actingAsAdmin();
 
         // Act
-        $this->post('/comments', $attributes);
+        $this->post('/news/'. $news->slug . '/comments', $attributes);
 
         // Assert
         $this->assertDatabaseHas((new \App\Comment())->getTable(), $attributes);
     }
-
     /** @test */
     public function a_guest_cannot_add_a_comment()
     {
+        // Arrange
+        $news = factory(News::class)->create();
+
         // Act
-        $response = $this->post('/comments', []);
+        $response = $this->post('/news/'. $news->slug . '/comments', []);
 
         // Assert
         $response->assertRedirect('/login');

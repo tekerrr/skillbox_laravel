@@ -19,7 +19,7 @@
         <p class="blog-post-meta">{{ $post->created_at->toformattedDateString() }}</p>
         {{ $post->body }}
 
-        @include('comment.index', ['comments' => $post->comments, 'parent' => $post])
+        @include('comment.index', ['comments' => $post->comments, 'parentType' => 'posts', 'parentId' => $post->id])
 
         @include('history.index', ['history' => $post->history])
 

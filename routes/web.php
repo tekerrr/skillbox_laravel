@@ -9,11 +9,12 @@ Route::view('/contacts', 'contacts')->name('contacts');
 Route::post('/feedback', 'FeedbackController@store')->name('feedback.store');
 
 Route::resource('posts', 'PostController');
-Route::get('/tags/{tag}', 'TagController@show')->name('tags.show');
+Route::post('/posts/{post}/comments', 'PostController@addComment')->name('posts.comments.store');
 
 Route::resource('news', 'NewsController')->only(['index', 'show']);
+Route::post('/news/{news}/comments', 'NewsController@addComment')->name('news.comments.store');
 
-Route::resource('comments', 'CommentController')->only('store');
+Route::get('/tags/{tag}', 'TagController@show')->name('tags.show');
 
 Route::prefix('/admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
     Route::view('/', 'admin.index')->name('index');

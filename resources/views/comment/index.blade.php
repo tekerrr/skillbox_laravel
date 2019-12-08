@@ -9,12 +9,9 @@
 @auth
     @include('layout.errors')
 
-    <form method="post" action="{{ route('comments.store') }}">
+    <form method="post" action="{{ route($parentType . '.comments.store', [$parentType => $parentId]) }}">
 
         @csrf
-
-        <input type="hidden" name="commentable_type" value="{{ get_class($parent) }}">
-        <input type="hidden" name="commentable_id" value="{{ $parent->id }}">
 
         <div class="form-group">
             <textarea class="form-control" id="inputBody" rows="3" name="body">{{ old('body') }}</textarea>
