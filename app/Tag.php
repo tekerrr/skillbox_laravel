@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Support\Collection;
+
 class Tag extends \Illuminate\Database\Eloquent\Model
 {
     protected $fillable = ['name'];
@@ -13,6 +15,14 @@ class Tag extends \Illuminate\Database\Eloquent\Model
         });
     }
 
+    public static function sync($taggable, $newTags)
+    {
+        $currentTags = $taggable->tags->keyBy('name');
+        $newTags = collect($newTags)->keyBy(function ($item) { return $item; });
+
+        $taggable->tags()->attach(Tag::getIds($newTags->diffKeys($currentTags)));
+        $taggable->tags()->detach(Tag::getIds($currentTags->diffKeys($newTags)));
+    }
 
     public static function tagsCloud()
     {

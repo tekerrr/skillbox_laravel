@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreNews;
+use App\Http\Requests\UpdateNews;
 use App\News;
 use App\Tag;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class NewsController extends Controller
 {
@@ -23,20 +22,10 @@ class NewsController extends Controller
         return view('admin.news.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreNews $request)
     {
-        $attributes = $this->validate(request(), [
-            'slug' => [
-                'required' ,
-                'regex:/^[\w\-]+$/',
-                'unique:' . (new News())->getTable() . ',slug'
-            ],
-            'title' => 'required|min:5|max:100',
-            'abstract' => 'required|max:255',
-            'body' => 'required',
-        ]);
-
-        $attributes['is_active'] = request()->has('is_active');
+        $attributes = $request->validated();
+        $attributes['is_active'] = $request->has('is_active');
 
         $news = News::create($attributes)
             ->tags()
@@ -53,28 +42,13 @@ class NewsController extends Controller
         return view('admin.news.edit', compact('news'));
     }
 
-    public function update(Request $request, News $news)
+    public function update(UpdateNews $request, News $news)
     {
-        $attributes = request()->validate([
-            'slug'     => [
-                'required',
-                'regex:/^[\w\-]+$/',
-                Rule::unique($news->getTable(), 'slug')->ignore($news->slug, 'slug'),
-            ],
-            'title'    => 'required|min:5|max:100',
-            'abstract' => 'required|max:255',
-            'body'     => 'required',
-        ]);
-
-        $attributes['is_active'] = request()->has('is_active');
+        $attributes = $request->validated();
+        $attributes['is_active'] = $request->has('is_active');
         $news->update($attributes);
 
-        /** @var Collection $currentTags */
-        $currentTags = $news->tags->keyBy('name');
-        $newTags = collect(explode(', ', request('tags')))->keyBy(function ($item) { return $item; });
-
-        $news->tags()->attach(Tag::getIds($newTags->diffKeys($currentTags)));
-        $news->tags()->detach(Tag::getIds($currentTags->diffKeys($newTags)));
+        Tag::sync($news, explode(', ', $request->get('tags')));
 
         flash('Новость успешно отредактирована');
 

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePost;
+use App\Http\Requests\UpdatePost;
 use App\Post;
 use App\Tag;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
@@ -28,20 +28,10 @@ class PostController extends Controller
         return view('posts.create');
     }
 
-    public function store()
+    public function store(StorePost $request)
     {
-        $attributes = $this->validate(request(), [
-            'slug' => [
-                'required' ,
-                'regex:/^[\w\-]+$/',
-                'unique:' . (new Post())->getTable() . ',slug'
-            ],
-            'title' => 'required|min:5|max:100',
-            'abstract' => 'required|max:255',
-            'body' => 'required',
-        ]);
-
-        $attributes['is_active'] = request()->has('is_active');
+        $attributes = $request->validated();
+        $attributes['is_active'] = $request->has('is_active');
         $attributes['owner_id'] = auth()->id();
 
         $post = Post::create($attributes)
@@ -66,28 +56,13 @@ class PostController extends Controller
         return view('posts.edit', compact('post'));
     }
 
-    public function update(Post $post)
+    public function update(Post $post, UpdatePost $request)
     {
-        $attributes = request()->validate([
-            'slug'     => [
-                'required',
-                'regex:/^[\w\-]+$/',
-                Rule::unique($post->getTable(), 'slug')->ignore($post->slug, 'slug'),
-            ],
-            'title'    => 'required|min:5|max:100',
-            'abstract' => 'required|max:255',
-            'body'     => 'required',
-        ]);
-
-        $attributes['is_active'] = request()->has('is_active');
+        $attributes = $request->validated();
+        $attributes['is_active'] = $request->has('is_active');
         $post->update($attributes);
 
-        /** @var Collection $currentTags */
-        $currentTags = $post->tags->keyBy('name');
-        $newTags = collect(explode(', ', request('tags')))->keyBy(function ($item) { return $item; });
-
-        $post->tags()->attach(Tag::getIds($newTags->diffKeys($currentTags)));
-        $post->tags()->detach(Tag::getIds($currentTags->diffKeys($newTags)));
+        Tag::sync($post, explode(', ', $request->get('tags')));
 
         flash('Статья успешно отредактирована');
 
