@@ -22,7 +22,12 @@ class Post extends \Illuminate\Database\Eloquent\Model
                 'before' => json_encode(Arr::only($post->getOriginal(), array_keys($after))),
             ]);
         });
+
+        static::deleting(function (Post $post) {
+            $post->comments()->delete();
+        });
     }
+
 
     public function getRouteKeyName()
     {
