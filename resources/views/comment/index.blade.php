@@ -9,7 +9,7 @@
 @auth
     @include('layout.errors')
 
-    <form method="post" action="{{ route($parentType . '.comments.store', [$parentType => $parentId]) }}">
+    <form method="post" action="{{ $route }}">
 
         @csrf
 
