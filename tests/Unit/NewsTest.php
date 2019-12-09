@@ -72,4 +72,20 @@ class NewsTest extends TestCase
         $this->assertEquals($news->comments->first()->body, $comments->first()->body);
         $this->assertEquals($news->comments->last()->body, $comments->last()->body);
     }
+
+    /** @test */
+    public function comments_are_deleted_when_the_post_is_deleted()
+    {
+        // Arrange
+        factory(\App\Comment::class, 2)->create();
+        $news = factory(News::class)->create();
+        $comment = factory(\App\Comment::class)->state('withoutCommentable')->make();
+        $news->comments()->save($comment);
+
+        // Act
+        $news->delete();
+
+        // Assert
+        $this->assertEquals(2, \App\Comment::count());
+    }
 }

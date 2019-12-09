@@ -27,29 +27,6 @@ class PostsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_cannot_view_the_post_list_admin_page()
-    {
-        // Arrange
-        $this->actingAsUser();
-
-        // Act
-        $response = $this->get('/admin/posts');
-
-        // Assert
-        $response->assertStatus(403);
-    }
-
-    /** @test */
-    public function a_guest_cannot_view_the_post_list_admin_page()
-    {
-        // Act
-        $response = $this->get('/admin/posts');
-
-        // Assert
-        $response->assertRedirect('/login');
-    }
-
-    /** @test */
     public function an_admin_can_activate_a_post()
     {
         // Arrange

@@ -10,6 +10,15 @@ class News extends Model
 
     protected $fillable = ['slug', 'title', 'abstract', 'body', 'is_active'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function (News $news) {
+            $news->comments()->delete();
+        });
+    }
+
     public function getRouteKeyName()
     {
         return 'slug';

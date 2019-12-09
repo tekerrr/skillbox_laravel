@@ -27,29 +27,6 @@ class NewsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_cannot_view_the_news_list_admin_page()
-    {
-        // Arrange
-        $this->actingAsUser();
-
-        // Act
-        $response = $this->get('/admin/news');
-
-        // Assert
-        $response->assertStatus(403);
-    }
-
-    /** @test */
-    public function a_guest_cannot_view_the_news_list_admin_page()
-    {
-        // Act
-        $response = $this->get('/admin/news');
-
-        // Assert
-        $response->assertRedirect('/login');
-    }
-
-    /** @test */
     public function an_admin_can_view_the_news_creation_page()
     {
         // Arrange
@@ -61,29 +38,6 @@ class NewsTest extends TestCase
         // Assert
         $response->assertViewIs('admin.news.create');
         $response->assertSeeText('Создание новости');
-    }
-
-    /** @test */
-    public function a_user_cannot_view_the_news_creation_page()
-    {
-        // Arrange
-        $this->actingAsUser();
-
-        // Act
-        $response = $this->get('/admin/news/create');
-
-        // Assert
-        $response->assertStatus(403);
-    }
-
-    /** @test */
-    public function a_guest_cannot_view_the_news_creation_page()
-    {
-        // Act
-        $response = $this->get('/admin/news/create');
-
-        // Assert
-        $response->assertRedirect('/login');
     }
 
     /** @test */
@@ -140,6 +94,22 @@ class NewsTest extends TestCase
     }
 
     /** @test */
+    public function the_non_unique_slug_fails_the_news_creation_validation_rules()
+    {
+        // Arrange
+        $this->actingAsAdmin();
+        $slug = $this->faker->word;
+        factory(News::class)->create(['slug' => $slug]);
+        $attributes = factory(News::class)->raw(['slug' => $slug]);
+
+        // Act
+        $response = $this->post('/admin/news', $attributes);
+
+        // Assert
+        $response->assertSessionHasErrors(['slug']);
+    }
+
+    /** @test */
     public function an_admin_can_view_the_news_editing_page()
     {
         // Arrange
@@ -152,33 +122,6 @@ class NewsTest extends TestCase
         // Assert
         $response->assertViewIs('admin.news.edit');
         $response->assertSeeText('Редактирование новости');
-    }
-
-    /** @test */
-    public function a_user_cannot_view_the_news_editing_page()
-    {
-        // Arrange
-        $news = factory(News::class)->create();
-        $this->actingAsUser();
-
-        // Act
-        $response = $this->get('/admin/news/' . $news->slug . '/edit');
-
-        // Assert
-        $response->assertStatus(403);
-    }
-
-    /** @test */
-    public function a_guest_cannot_view_the_news_editing_page()
-    {
-        // Arrange
-        $news = factory(News::class)->create();
-
-        // Act
-        $response = $this->get('/admin/news/' . $news->slug . '/edit');
-
-        // Assert
-        $response->assertRedirect('/login');
     }
 
     /** @test */
@@ -240,6 +183,24 @@ class NewsTest extends TestCase
 
         // Assert
         $response->assertRedirect('/login');
+    }
+
+    /** @test */
+    public function the_non_unique_slug_fails_the_news_updating_validation_rules()
+    {
+        // Arrange
+        $this->actingAsAdmin();
+        $slug = $this->faker->word;
+        factory(News::class)->create(['slug' => $slug]);
+        $attributes = factory(News::class)->raw();
+        $news = News::create($attributes);
+
+        // Act
+        $attributes['slug'] = $slug;
+        $response = $this->patch('/admin/news/' . $news->slug, $attributes);
+
+        // Assert
+        $response->assertSessionHasErrors(['slug']);
     }
 
     /** @test */
