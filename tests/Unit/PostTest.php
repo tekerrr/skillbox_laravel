@@ -117,4 +117,20 @@ class PostTest extends TestCase
         $this->assertDatabaseHas((new \App\PostHistory())->getTable(), ['before' => json_encode(['title' => $oldTitle])]);
         $this->assertDatabaseHas((new \App\PostHistory())->getTable(), ['after' => json_encode(['title' => $newTitle])]);
     }
+
+    /** @test */
+    public function comments_are_deleted_when_the_post_is_deleted()
+    {
+        // Arrange
+        factory(\App\Comment::class, 2)->create();
+        $post = factory(Post::class)->create();
+        $comment = factory(\App\Comment::class)->state('withoutCommentable')->make();
+        $post->comments()->save($comment);
+
+        // Act
+        $post->delete();
+
+        // Assert
+        $this->assertEquals(2, \App\Comment::count());
+    }
 }
