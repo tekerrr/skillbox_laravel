@@ -27,10 +27,8 @@ class NewsController extends Controller
         $attributes = $request->validated();
         $attributes['is_active'] = $request->has('is_active');
 
-        $news = News::create($attributes)
-            ->tags()
-            ->attach(Tag::getIds(explode(', ', request('tags'))))
-        ;
+        $news = News::create($attributes);
+        Tag::sync($news, $request->getTags());
 
         flash('Новость успешно создана');
 
@@ -46,9 +44,9 @@ class NewsController extends Controller
     {
         $attributes = $request->validated();
         $attributes['is_active'] = $request->has('is_active');
-        $news->update($attributes);
 
-        Tag::sync($news, explode(', ', $request->get('tags')));
+        $news->update($attributes);
+        Tag::sync($news, $request->getTags());
 
         flash('Новость успешно отредактирована');
 

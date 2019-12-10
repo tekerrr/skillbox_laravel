@@ -34,10 +34,8 @@ class PostController extends Controller
         $attributes['is_active'] = $request->has('is_active');
         $attributes['owner_id'] = auth()->id();
 
-        $post = Post::create($attributes)
-            ->tags()
-            ->attach(Tag::getIds(explode(', ', request('tags'))))
-        ;
+        $post = Post::create($attributes);
+        Tag::sync($post, $request->getTags());
 
         flash('Статья успешно создана');
 
@@ -60,9 +58,9 @@ class PostController extends Controller
     {
         $attributes = $request->validated();
         $attributes['is_active'] = $request->has('is_active');
-        $post->update($attributes);
 
-        Tag::sync($post, explode(', ', $request->get('tags')));
+        $post->update($attributes);
+        Tag::sync($post, $request->getTags());
 
         flash('Статья успешно отредактирована');
 

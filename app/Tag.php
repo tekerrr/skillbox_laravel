@@ -8,13 +8,6 @@ class Tag extends \Illuminate\Database\Eloquent\Model
 {
     protected $fillable = ['name'];
 
-    public static function getIds($names)
-    {
-        return collect($names)->map(function ($name) {
-            return Tag::firstOrCreate(['name' => $name])->id;
-        });
-    }
-
     public static function sync($taggable, $newTags)
     {
         $currentTags = $taggable->tags->keyBy('name');
@@ -22,6 +15,13 @@ class Tag extends \Illuminate\Database\Eloquent\Model
 
         $taggable->tags()->attach(Tag::getIds($newTags->diffKeys($currentTags)));
         $taggable->tags()->detach(Tag::getIds($currentTags->diffKeys($newTags)));
+    }
+
+    protected static function getIds($names)
+    {
+        return collect($names)->map(function ($name) {
+            return Tag::firstOrCreate(['name' => $name])->id;
+        });
     }
 
     public static function tagsCloud()

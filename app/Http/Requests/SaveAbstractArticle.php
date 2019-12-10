@@ -33,4 +33,9 @@ class SaveAbstractArticle extends FormRequest
             'body.required' => 'Поле "Детальное описание" обязательно для заполнения',
         ];
     }
+
+    public function getTags()
+    {
+        return explode(', ', $this->get('tags'));
+    }
 }
