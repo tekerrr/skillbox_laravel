@@ -18,11 +18,7 @@ class CommentsTest extends TestCase
     {
         // Arrange
         $post = factory(Post::class)->create();
-        $attributes = [
-            'body' => $this->faker->sentence,
-            'commentable_type' => Post::class,
-            'commentable_id' => $post->id,
-        ];
+        $attributes = ['body' => $this->faker->sentence];
         $this->actingAsUser();
 
         // Act
@@ -37,11 +33,7 @@ class CommentsTest extends TestCase
     {
         // Arrange
         $post = factory(Post::class)->create(['owner_id' => $this->actingAsUser()]);
-        $attributes = [
-            'body' => $this->faker->sentence,
-            'commentable_type' => Post::class,
-            'commentable_id' => $post->id,
-        ];
+        $attributes = ['body' => $this->faker->sentence];
 
         // Act
         $this->post('/posts/'. $post->slug . '/comments', $attributes);
@@ -55,11 +47,7 @@ class CommentsTest extends TestCase
     {
         // Arrange
         $post = factory(Post::class)->create();
-        $attributes = [
-            'body' => $this->faker->sentence,
-            'commentable_type' => Post::class,
-            'commentable_id' => $post->id,
-        ];
+        $attributes = ['body' => $this->faker->sentence];
         $this->actingAsAdmin();
 
         // Act
@@ -87,11 +75,7 @@ class CommentsTest extends TestCase
     {
         // Arrange
         $news = factory(News::class)->create();
-        $attributes = [
-            'body' => $this->faker->sentence,
-            'commentable_type' => News::class,
-            'commentable_id' => $news->id,
-        ];
+        $attributes = ['body' => $this->faker->sentence];
         $this->actingAsUser();
 
         // Act
@@ -106,11 +90,7 @@ class CommentsTest extends TestCase
     {
         // Arrange
         $news = factory(News::class)->create();
-        $attributes = [
-            'body' => $this->faker->sentence,
-            'commentable_type' => News::class,
-            'commentable_id' => $news->id,
-        ];
+        $attributes = ['body' => $this->faker->sentence];
         $this->actingAsAdmin();
 
         // Act
@@ -119,6 +99,7 @@ class CommentsTest extends TestCase
         // Assert
         $this->assertDatabaseHas((new \App\Comment())->getTable(), $attributes);
     }
+
     /** @test */
     public function a_guest_cannot_add_a_comment()
     {

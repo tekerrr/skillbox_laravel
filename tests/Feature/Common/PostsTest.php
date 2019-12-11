@@ -175,21 +175,6 @@ class PostsTest extends TestCase
     }
 
     /** @test */
-    public function the_non_unique_slug_fails_the_post_creation_validation_rules()
-    {
-        // Arrange
-        $slug = $this->faker->word;
-        factory(Post::class)->create(['slug' => $slug]);
-        $attributes = factory(Post::class)->raw(['owner_id' => $this->actingAsUser(), 'slug' => $slug]);
-
-        // Act
-        $response = $this->post('/posts', $attributes);
-
-        // Assert
-        $response->assertSessionHasErrors(['slug']);
-    }
-
-    /** @test */
     public function a_user_can_view_the_his_post_editing_page()
     {
         // Arrange
@@ -319,23 +304,6 @@ class PostsTest extends TestCase
 
         // Assert
         $response->assertRedirect('/login');
-    }
-
-    /** @test */
-    public function the_non_unique_slug_fails_the_post_updating_validation_rules()
-    {
-        // Arrange
-        $slug = $this->faker->word;
-        factory(Post::class)->create(['slug' => $slug]);
-        $attributes = factory(Post::class)->raw(['owner_id' => $this->actingAsUser()]);
-        $post = Post::create($attributes);
-
-        // Act
-        $attributes['slug'] = $slug;
-        $response = $this->patch('/posts/' . $post->slug, $attributes);
-
-        // Assert
-        $response->assertSessionHasErrors(['slug']);
     }
 
     /** @test */

@@ -94,22 +94,6 @@ class NewsTest extends TestCase
     }
 
     /** @test */
-    public function the_non_unique_slug_fails_the_news_creation_validation_rules()
-    {
-        // Arrange
-        $this->actingAsAdmin();
-        $slug = $this->faker->word;
-        factory(News::class)->create(['slug' => $slug]);
-        $attributes = factory(News::class)->raw(['slug' => $slug]);
-
-        // Act
-        $response = $this->post('/admin/news', $attributes);
-
-        // Assert
-        $response->assertSessionHasErrors(['slug']);
-    }
-
-    /** @test */
     public function an_admin_can_view_the_news_editing_page()
     {
         // Arrange
@@ -183,24 +167,6 @@ class NewsTest extends TestCase
 
         // Assert
         $response->assertRedirect('/login');
-    }
-
-    /** @test */
-    public function the_non_unique_slug_fails_the_news_updating_validation_rules()
-    {
-        // Arrange
-        $this->actingAsAdmin();
-        $slug = $this->faker->word;
-        factory(News::class)->create(['slug' => $slug]);
-        $attributes = factory(News::class)->raw();
-        $news = News::create($attributes);
-
-        // Act
-        $attributes['slug'] = $slug;
-        $response = $this->patch('/admin/news/' . $news->slug, $attributes);
-
-        // Assert
-        $response->assertSessionHasErrors(['slug']);
     }
 
     /** @test */
