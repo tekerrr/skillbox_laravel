@@ -17,10 +17,10 @@
         @foreach($posts as $post)
             <tr>
                 <th scope="row">{{ $post->id }}</th>
-                <td><a href="/posts/{{ $post->slug }}">{{ $post->title }}</a></td>
+                <td><a href="{{ route('posts.show', compact('post')) }}">{{ $post->title }}</a></td>
                 <td>{{ $post->created_at->toformattedDateString() }}</td>
                 <td>
-                    <form method="POST" action="/admin/posts/{{ $post->slug }}/{{ $post->isActive() ? 'deactivate' : 'activate' }}">
+                    <form method="POST" action="{{ route('admin.posts.' . ($post->isActive() ? 'deactivate' : 'activate'), compact('post')) }}">
                         @csrf
                         @method('PATCH')
                         <button type="submit" class="btn btn-sm btn-outline-{{ $post->isActive() ? 'danger' : 'primary' }}">
@@ -29,7 +29,7 @@
                     </form>
                 </td>
                 <td>
-                    <a class="btn btn-sm btn-primary" href="/posts/{{ $post->slug }}/edit">Изменить</a>
+                    <a class="btn btn-sm btn-outline-primary" href="{{ route('posts.edit', compact('post')) }}">Изменить</a>
                 </td>
             </tr>
         @endforeach

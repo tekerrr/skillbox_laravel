@@ -23,7 +23,6 @@ class CreatePostsTable extends Migration
             $table->boolean('is_active')->default(false);
             $table->timestamps();
 
-            // TODO удалить ли вместо с пользователем статьти?
             $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

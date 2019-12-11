@@ -6,48 +6,24 @@
 
     @include('layout.errors')
 
-    <form method="POST" action="/posts/{{ $post->slug }}">
+    <form method="POST" action="{{ route('posts.update', compact('post')) }}">
 
         @csrf
         @method('PATCH')
 
-        <div class="form-group">
-            <label for="inputSlug">Символьный код</label>
-            <input type="text" class="form-control" id="inputSlug" placeholder="Введите символьный код"
-                   name="slug"
-                   value="{{ old('slug', $post->slug) }}">
-        </div>
-        <div class="form-group">
-            <label for="inputTitle">Название статьи</label>
-            <input type="text" class="form-control" id="inputTitle" placeholder="Введите название статьи"
-                   name="title"
-                   value="{{ old('title', $post->title) }}">
-        </div>
-        <div class="form-group">
-            <label for="inputAbstract">Краткое описание статьи</label>
-            <textarea class="form-control" id="inputAbstract" rows="3" name="abstract">{{ old('abstract', $post->abstract) }}</textarea>
-        </div>
-        <div class="form-group">
-            <label for="inputBody">Детальное описание стати</label>
-            <textarea class="form-control" id="inputBody" rows="3" name="body">{{ old('body', $post->body) }}</textarea>
-        </div>
-        <div class="form-group">
-            <label for="inputTags">Теги </label>
-            <input type="text" class="form-control" id="inputTags" placeholder="Введите теги (разделитель &quot;, &quot;)"
-                   name="tags"
-                   value="{{ old('tags', $post->tags->pluck('name')->implode(', ')) }}">
-        </div>
-        <div class="form-group form-check">
-            <input class="form-check-input" type="checkbox" id="checkboxActive" value="1"
-                   name="is_active"  {{ (old('is_active') || (!old('_token') && $post->isActive())) ? 'checked' : '' }}>
-            <label class="form-check-label" for="checkboxActive">Опубликовать</label>
-        </div>
+        @include('layout.form.slug', ['default' => $post->slug])
+        @include('layout.form.title', ['default' => $post->title])
+        @include('layout.form.abstract', ['default' => $post->abstract])
+        @include('layout.form.body', ['default' => $post->body])
+        @include('layout.form.tags', ['default' => $post->tags->pluck('name')->implode(', ')])
+        @include('layout.form.is_active', ['default' => $post->isActive()])
+
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Обновить</button>
         </div>
     </form>
 
-    <form method="POST" action="/posts/{{ $post->slug }}">
+    <form method="POST" action="{{ route('posts.destroy', compact('post')) }}">
         @csrf
         @method('DELETE')
 

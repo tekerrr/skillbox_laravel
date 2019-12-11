@@ -27,4 +27,3 @@ if (! function_exists('push_all_to_admin')) {
         return app(\App\Service\PushAllToAdmin::class)->send($title, $text);
     }
 }
-

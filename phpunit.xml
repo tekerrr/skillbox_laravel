@@ -20,6 +20,10 @@
         <testsuite name="Feature\Admin">
             <directory suffix="Test.php">./tests/Feature/Admin</directory>
         </testsuite>
+
+        <testsuite name="Feature\RequestValidation">
+            <directory suffix="Test.php">./tests/Feature/RequestValidation</directory>
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">

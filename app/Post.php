@@ -2,42 +2,61 @@
 
 namespace App;
 
+use Illuminate\Support\Arr;
+
 class Post extends \Illuminate\Database\Eloquent\Model
 {
+    use CanBeActivated;
+
     protected $fillable = ['owner_id', 'slug', 'title', 'abstract', 'body', 'is_active'];
+
+    protected $casts = ['is_active' => 'boolean'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updating(function (Post $post) {
+            $post->history()->attach(auth()->id(), [
+                'after' => json_encode($after = $post->getDirty()),
+                'before' => json_encode(Arr::only($post->getOriginal(), array_keys($after))),
+            ]);
+        });
+
+        static::deleting(function (Post $post) {
+            $post->comments()->delete();
+        });
+    }
+
 
     public function getRouteKeyName()
     {
         return 'slug';
     }
 
-    public function scopeActive($query)
+    public function user()
     {
-        return $query->where('is_active', true);
-    }
-
-    public function isActive(): bool
-    {
-        return $this->is_active;
-    }
-
-    public function activate()
-    {
-        $this->update(['is_active' => true]);
-
-        return $this;
-    }
-
-    public function deactivate()
-    {
-        $this->update(['is_active' => false]);
-
-        return $this;
+        return $this->belongsTo(User::class, 'owner_id');
     }
 
     public function tags()
     {
-        return $this->belongsToMany(Tag::class)->orderBy('name');
+        return $this->morphToMany(Tag::class, 'taggable')->orderBy('name');
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function history()
+    {
+        return $this
+            ->belongsToMany(User::class, 'post_histories')
+            ->withPivot(['before', 'after'])
+            ->withTimestamps()
+            ->orderByDesc('pivot_created_at')
+        ;
     }
 
 }

@@ -13,7 +13,7 @@ class PostsTest extends TestCase
     use RefreshDatabase, WithFaker, WithRoles;
 
     /** @test */
-    public function an_admin_can_view_the_post_list_page()
+    public function an_admin_can_view_the_post_list_admin_page()
     {
         // Arrange
         $this->actingAsAdmin();
@@ -24,29 +24,6 @@ class PostsTest extends TestCase
         // Assert
         $response->assertViewIs('admin.posts');
         $response->assertSeeText('Список статей');
-    }
-
-    /** @test */
-    public function a_user_cannot_view_the_post_list_admin_page()
-    {
-        // Arrange
-        $this->actingAsUser();
-
-        // Act
-        $response = $this->get('/admin/posts');
-
-        // Assert
-        $response->assertStatus(403);
-    }
-
-    /** @test */
-    public function a_guest_cannot_view_the_post_list_admin_page()
-    {
-        // Act
-        $response = $this->get('/admin/posts');
-
-        // Assert
-        $response->assertRedirect('/login');
     }
 
     /** @test */

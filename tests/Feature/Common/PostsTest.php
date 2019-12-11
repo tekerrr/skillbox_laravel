@@ -20,7 +20,23 @@ class PostsTest extends TestCase
 
         // Assert
         $response->assertViewIs('posts.index');
-        $response->assertSeeText('Список публикаци');
+        $response->assertSeeText('Публикации');
+    }
+
+    /** @test */
+    public function anyone_can_view_tags_on_the_post_list_page()
+    {
+        // Arrange
+        $post = factory(Post::class)->create();
+        $tags = factory(\App\Tag::class, 2)->create();
+        $post->tags()->attach($tags);
+
+        // Act
+        $response = $this->get('/posts');
+
+        // Assert
+        $response->assertSeeText($tags->first()->name);
+        $response->assertSeeText($tags->last()->name);
     }
 
     /** @test */
@@ -35,6 +51,37 @@ class PostsTest extends TestCase
         // Assert
         $response->assertViewIs('posts.show');
         $response->assertSeeText($post->body);
+    }
+
+    /** @test */
+    public function anyone_can_view_a_post_history_on_the_post_page()
+    {
+        // Arrange
+        $post = factory(Post::class)->create();
+        $history = factory(\App\PostHistory::class)->create(['post_id' => $post]);
+
+        // Act
+        $response = $this->get('/posts/' . $post->slug);
+
+        // Assert
+        $response->assertSeeText(htmlentities($history->before));
+        $response->assertSeeText(htmlentities($history->after));
+    }
+
+    /** @test */
+    public function anyone_can_view_tags_on_the_post_page()
+    {
+        // Arrange
+        $post = factory(Post::class)->create();
+        $tags = factory(\App\Tag::class, 2)->create();
+        $post->tags()->attach($tags);
+
+        // Act
+        $response = $this->get('/posts/' . $post->slug);
+
+        // Assert
+        $response->assertSeeText($tags->first()->name);
+        $response->assertSeeText($tags->last()->name);
     }
 
     /** @test */
@@ -121,7 +168,7 @@ class PostsTest extends TestCase
     public function a_guest_cannot_create_a_post()
     {
         // Act
-        $response = $this->post('posts', []);
+        $response = $this->post('/posts', []);
 
         // Assert
         $response->assertRedirect('/login');
@@ -196,6 +243,25 @@ class PostsTest extends TestCase
 
         // Assert
         $this->assertDatabaseHas((new Post())->getTable(), $attributes);
+    }
+
+    /** @test */
+    public function a_user_can_update_tags_in_his_post()
+    {
+        // Arrange
+        $attributes = factory(Post::class)->raw([
+            'owner_id' => $this->actingAsUser(),
+            'tags' => $oldTagName = $this->faker->unique()->word,
+        ]);
+        Post::create($attributes);
+
+        // Act
+        $attributes['tags'] = $newTagName = $this->faker->unique()->word;
+        $this->patch('/posts/' . $attributes['slug'], $attributes);
+
+        // Assert
+        $this->assertEquals(Post::first()->tags()->first()->name, $newTagName);
+        $this->assertNull(Post::first()->tags()->where('name', $oldTagName)->first());
     }
 
     /** @test */

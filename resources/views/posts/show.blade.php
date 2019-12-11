@@ -5,9 +5,9 @@
     {{ $post->title }}
     @can('update', $post)
         @admin
-            <a href="/admin/posts/">Редактировать</a>
+            <a href="{{ route('admin.posts.index') }}">Редактировать</a>
         @else
-            <a href="/posts/{{ $post->slug }}/edit">Редактировать</a>
+            <a href="{{ route('posts.edit', compact('post')) }}">Редактировать</a>
         @endadmin
     @endcan
 @endsection
@@ -19,7 +19,11 @@
         <p class="blog-post-meta">{{ $post->created_at->toformattedDateString() }}</p>
         {{ $post->body }}
 
+        @include('comment.index', ['comments' => $post->comments, 'route' => route('posts.comments.store', compact('post'))])
+
+        @include('history.index', ['history' => $post->history])
+
         <hr>
-        <a href="/">Вернуться к списку статей</a>
+        <a href="{{ route('posts.index') }}">Вернуться к списку статей</a>
     </div>
 @endsection

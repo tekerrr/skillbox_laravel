@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePost;
+use App\Http\Requests\UpdatePost;
 use App\Post;
 use App\Tag;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
@@ -18,7 +18,7 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = Post::active()->latest()->get();
+        $posts = Post::active()->latest()->simplePaginate(10);
 
         return view('posts.index', compact('posts'));
     }
@@ -28,38 +28,24 @@ class PostController extends Controller
         return view('posts.create');
     }
 
-    public function store()
+    public function store(StorePost $request)
     {
-        $attributes = $this->validate(request(), [
-            'slug' => [
-                'required' ,
-                'regex:/^[\w\-]+$/',
-                'unique:' . (new Post())->getTable() . ',slug'
-            ],
-            'title' => 'required|min:5|max:100',
-            'abstract' => 'required|max:255',
-            'body' => 'required',
-        ]);
-
-        $attributes['is_active'] = request()->has('is_active');
+        $attributes = $request->validated();
+        $attributes['is_active'] = $request->has('is_active');
         $attributes['owner_id'] = auth()->id();
 
         $post = Post::create($attributes);
-
-        $newTags = collect(explode(', ', request('tags')))->keyBy(function ($item) { return $item; });
-
-        foreach ($newTags as $tag) {
-            $tag = Tag::firstOrCreate(['name' => $tag]);
-            $post->tags()->attach($tag);
-        }
+        Tag::sync($post, $request->getTags());
 
         flash('Статья успешно создана');
 
-        return redirect('/posts');
+        return redirect()->route('posts.index');
     }
 
     public function show(Post $post)
     {
+        $post->load('comments', 'comments.user');
+
         return view('posts.show', compact('post'));
     }
 
@@ -68,41 +54,17 @@ class PostController extends Controller
         return view('posts.edit', compact('post'));
     }
 
-    public function update(Post $post)
+    public function update(Post $post, UpdatePost $request)
     {
-        $attributes = request()->validate([
-            'slug'     => [
-                'required',
-                'regex:/^[\w\-]+$/',
-                Rule::unique($post->getTable(), 'slug')->ignore($post->slug, 'slug'),
-            ],
-            'title'    => 'required|min:5|max:100',
-            'abstract' => 'required|max:255',
-            'body'     => 'required',
-        ]);
+        $attributes = $request->validated();
+        $attributes['is_active'] = $request->has('is_active');
 
-        $attributes['is_active'] = request()->has('is_active');
         $post->update($attributes);
-
-        /** @var Collection $currentTags */
-        $currentTags = $post->tags->keyBy('name');
-        $newTags = collect(explode(', ', request('tags')))->keyBy(function ($item) { return $item; });
-
-        $tagsToAttach = $newTags->diffKeys($currentTags);
-        $tagsToDetach = $currentTags->diffKeys($newTags);
-
-        foreach ($tagsToAttach as $tag) {
-            $tag = Tag::firstOrCreate(['name' => $tag]);
-            $post->tags()->attach($tag);
-        }
-
-        foreach ($tagsToDetach as $tag) {
-            $post->tags()->detach($tag);
-        }
+        Tag::sync($post, $request->getTags());
 
         flash('Статья успешно отредактирована');
 
-        return redirect('/posts');
+        return redirect()->route('posts.index');
     }
 
     public function destroy(Post $post)
@@ -111,6 +73,16 @@ class PostController extends Controller
 
         flash('Статья удалена', 'danger');
 
-        return redirect('/posts');
+        return redirect()->route('posts.index');
+    }
+
+    public function addComment(Post $post)
+    {
+        $attributes = $this->validate(request(), ['body' => 'required']);
+        $attributes['owner_id'] = auth()->id();
+
+        $post->comments()->create($attributes);
+
+        return back();
     }
 }

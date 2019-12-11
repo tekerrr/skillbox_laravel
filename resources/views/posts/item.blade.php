@@ -1,5 +1,5 @@
 <div class="blog-post">
-    <h2 class="blog-post-title"><a href="/posts/{{ $post->slug }}">{{ $post->title }}</a></h2>
+    <h2 class="blog-post-title"><a href="{{ route('posts.show', compact('post')) }}">{{ $post->title }}</a></h2>
 
     @include('tags.items', ['tags' => $post->tags])
 

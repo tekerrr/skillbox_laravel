@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\WithRoles;
 use Tests\TestCase;
 
-class UsersTest extends TestCase
+class UserTest extends TestCase
 {
     use RefreshDatabase, WithFaker, WithRoles;
 
@@ -26,6 +26,36 @@ class UsersTest extends TestCase
         $this->assertTrue($user->hasRole($roles->first()->role));
         $this->assertTrue($user->hasRole($roles->last()->role));
         $this->assertFalse($user->hasRole($this->faker->words(2, true)));
+    }
+
+    /** @test */
+    public function a_user_can_have_posts()
+    {
+        // Arrange
+        $user = $this->createUser();
+        $posts = factory(\App\Post::class, 2)->make(['owner_id' => '']);
+
+        // Act
+        $user->posts()->saveMany($posts);
+
+        // Assert
+        $this->assertEquals($user->posts->first()->body, $posts->first()->body);
+        $this->assertEquals($user->posts->last()->body, $posts->last()->body);
+    }
+
+    /** @test */
+    public function a_user_can_have_comments()
+    {
+        // Arrange
+        $user = $this->createUser();
+        $comments = factory(\App\Comment::class, 2)->make(['owner_id' => '']);
+
+        // Act
+        $user->comments()->saveMany($comments);
+
+        // Assert
+        $this->assertEquals($user->comments->first()->body, $comments->first()->body);
+        $this->assertEquals($user->comments->last()->body, $comments->last()->body);
     }
 
     /** @test */

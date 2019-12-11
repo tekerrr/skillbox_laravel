@@ -2,7 +2,7 @@
 # Новые статьи на сайте за последние {{ $period }} дней
 
 @foreach ($posts as $post)
-- [{{ $post->title }}](/posts/{{ $post->slug }})
+- [{{ $post->title }}](route('posts.show', compact('post')))
 @endforeach
 
 Thanks,<br>
