@@ -66,7 +66,7 @@ Route::get('/test1', function () {
     return $users->load('tasks');
 });
 
-Route::get('/test', function () {
+Route::get('/test2', function () {
 //    \DB::connection('other')->select();
 //    \DB::connection('other')->getPdo();
 //    dd(\DB::select('select * from users where id = ?', [1]));
@@ -277,4 +277,15 @@ Route::get('/test', function () {
     ;
 
     dump($images);
+});
+
+Route::get('/test', function () {
+    \App\Jobs\CompetedTasksReport::dispatch();
+    \App\Jobs\CompetedTasksReport::dispatch(\App\User::first())
+        ->delay(now()->addSecond(10))
+    ;
+
+    dispatch(function () {
+        echo 'Hello';
+    });
 });

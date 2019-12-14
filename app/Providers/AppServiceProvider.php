@@ -5,6 +5,8 @@ namespace App\Providers;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Queue\Events\JobProcessed;
+use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,6 +28,15 @@ class AppServiceProvider extends ServiceProvider
         \DB::listen(function ($query) {
 //            dd($query);
         });
+
+//        \Queue::failing(function (\Illuminate\Queue\Events\JobFailed $event) {
+//            //
+//        });
+
+//        \Queue::before(function (JobProcessing $event) {});
+//        \Queue::after(function (JobProcessed $event) {});
+
+//        \Queue::looping(function () {});
     }
 
     /**

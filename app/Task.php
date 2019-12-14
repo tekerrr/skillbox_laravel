@@ -79,9 +79,14 @@ class Task extends Model
         return 'id';
     }
 
-    public function scopeIncomplete($query)
+    public function scopeIncompleted($query)
     {
         return $query->where('completed', false);
+    }
+
+    public function scopeCompleted($query)
+    {
+        return $query->where('completed', true);
     }
 
     public function scopeOfType($query, $type)

@@ -15,6 +15,11 @@ class Step extends Model
         return $this->belongsTo(Task::class);
     }
 
+    public function scopeCompleted($query)
+    {
+        return $query->where('completed', true);
+    }
+
     public function complete(bool $completed = true)
     {
         $this->update(['completed' => $completed]);
@@ -28,5 +33,10 @@ class Step extends Model
     public function tags()
     {
         return $this->morphToMany(Tag::class, 'taggable');
+    }
+
+    public function owner()
+    {
+        return $this->hasOneThrough(User::class, Task::class, 'id', 'id', 'task_id', 'owner_id');
     }
 }
