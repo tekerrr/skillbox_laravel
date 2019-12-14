@@ -50,11 +50,16 @@ class CompetedTasksReport implements ShouldQueue
             ->count()
         ;
 
-        echo ($this->owner ? $this->owner->name : 'Всего') . ": выполненных шагов: $stepsCount, Выполненных задач: $tasksCount";
+        \Log::info(($this->owner ? $this->owner->name : 'Всего') . ": выполненных шагов: $stepsCount, Выполненных задач: $tasksCount");
     }
 
     public function failed(\Exception $exception)
     {
         \Log::error($exception->getMessage());
+    }
+
+    public function tags()
+    {
+        return ['reports', 'ownew:' . optional($this->owner)->id];
     }
 }
