@@ -33,7 +33,7 @@ class CompetedTasksReport implements ShouldQueue
 
     public function handle()
     {
-        throw new \Exception('Some Error');
+//        throw new \Exception('Some Error');
 
         $tasksCount = \App\Task::when(null !== $this->owner, function ($query) {
                 $query->where('owner_id', $this->owner->id);

@@ -282,10 +282,10 @@ Route::get('/test2', function () {
 Route::get('/test', function () {
     \App\Jobs\CompetedTasksReport::dispatch();
     \App\Jobs\CompetedTasksReport::dispatch(\App\User::first())
-        ->delay(now()->addSecond(10))
+        ->onQueue('reports')
     ;
-
-    dispatch(function () {
-        echo 'Hello';
-    });
+//
+//    dispatch(function () {
+//        echo 'Hello';
+//    });
 });
