@@ -279,7 +279,7 @@ Route::get('/test2', function () {
     dump($images);
 });
 
-Route::get('/test', function () {
+Route::get('/test3', function () {
     \App\Jobs\CompetedTasksReport::dispatch();
     \App\Jobs\CompetedTasksReport::dispatch(\App\User::first())
         ->onQueue('reports')
@@ -288,4 +288,8 @@ Route::get('/test', function () {
 //    dispatch(function () {
 //        echo 'Hello';
 //    });
+});
+
+Route::get('/test', function () {
+    event(new \App\Events\SomethingHappens('Мы настроили WS-соединение!'));
 });
