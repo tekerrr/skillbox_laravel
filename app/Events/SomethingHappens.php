@@ -25,4 +25,21 @@ class SomethingHappens implements ShouldBroadcast
     {
         return new Channel('hello');
     }
+
+    public function broadcastAs()
+    {
+        return 'event.happens';
+    }
+
+    public function broadcastWith()
+    {
+        return ['what' => $this->whatHappens, 'other' => 'line'];
+    }
+
+//    public $broadcastQueue = 'default';
+
+//    public function broadcastWhen()
+//    {
+//        return true;
+//    }
 }

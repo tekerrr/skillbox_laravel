@@ -5,6 +5,8 @@
 @section('content')
     <p class="blog-post-meta">{{ $task->created_at->toformattedDateString() }}</p>
 
+    <task-update task-id="{{ $task->id }}"></task-update>
+
     @include('tasks.tags', ['tags' => $task->tags])
 
     {{ $task->body }}

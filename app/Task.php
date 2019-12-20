@@ -13,7 +13,8 @@ class Task extends Model
     protected $fillable = ['title', 'body', 'owner_id'];
 
     protected $dispatchesEvents = [
-        'created' => \App\Events\TaskCreated::class
+        'created' => \App\Events\TaskCreated::class,
+        'updated' => \App\Events\TaskUpdated::class,
     ];
 
     protected $attributes = [

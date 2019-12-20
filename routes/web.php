@@ -293,3 +293,7 @@ Route::get('/test3', function () {
 Route::get('/test', function () {
     event(new \App\Events\SomethingHappens('Мы настроили WS-соединение!'));
 });
+
+Route::post('/chat', function () {
+    broadcast(new \App\Events\ChatMessage(request('message'), auth()->user()))->toOthers();
+})->middleware('auth');

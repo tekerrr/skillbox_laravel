@@ -19,6 +19,9 @@
         }
     </style>
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
+    <script>
+        var userId = {{ auth()->id() }};
+    </script>
 </head>
 
 <body>
@@ -69,6 +72,8 @@
             @show
 
         </div>
+
+        <chat></chat>
 
     </main>
 
