@@ -29,3 +29,17 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth', 'role:admin'])->gro
     Route::patch('/news/{news}/activate', 'Admin\NewsController@activate')->name('news.activate');
     Route::patch('/news/{news}/deactivate', 'Admin\NewsController@deactivate')->name('news.deactivate');
 });
+
+Route::get('/test', function () {
+    $header = ['first name', 'last name', 'email'];
+    $records = [
+        [1, 2, 3],
+        ['foo', 'bar', 'baz'],
+        ['john', 'doe', 'john.doe@example.com'],
+    ];
+
+    $csv = \League\Csv\Writer::createFromPath(storage_path('app/new_file.csv'), 'w+');
+    $csv->insertOne($header);
+    $csv->insertAll($records);
+    return 'ok';
+});
