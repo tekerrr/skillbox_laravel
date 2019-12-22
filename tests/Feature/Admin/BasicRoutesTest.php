@@ -128,4 +128,18 @@ class BasicRoutesTest extends TestCase
         $response->assertSeeText('Отчёт: Итого');
         $response->assertViewIs('admin.reports.total');
     }
+
+    /** @test */
+    public function an_admin_can_view_the_admin_saved_report_list_page()
+    {
+        // Arrange
+        $this->actingAsAdmin();
+
+        // Act
+        $response = $this->get('/admin/reports/files');
+
+        // Assert
+        $response->assertSeeText('Сохранённые отчёты');
+        $response->assertViewIs('admin.reports.saved-report');
+    }
 }

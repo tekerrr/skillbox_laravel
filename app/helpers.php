@@ -27,3 +27,13 @@ if (! function_exists('push_all_to_admin')) {
         return app(\App\Service\PushAllToAdmin::class)->send($title, $text);
     }
 }
+
+if (! function_exists('short_path')) {
+    /**
+     * @param string $path
+     * @return string
+     */
+    function short_path(string $path): string {
+        return collect(explode('/', trim($path, '/')))->last();
+    }
+}

@@ -11,6 +11,6 @@ return [
     ],
 
     'path' => [
-        'reports' => 'app/reports/',
+        'reports' => 'reports/',
     ],
 ];

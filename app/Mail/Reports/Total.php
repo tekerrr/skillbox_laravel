@@ -19,7 +19,7 @@ class Total extends Mailable
     {
         $this->report = $report;
         $this->csv = $csv;
-        $this->csvName = collect(explode('/', $csv))->last();
+        $this->csvName = short_path($csv);
     }
 
     public function build()

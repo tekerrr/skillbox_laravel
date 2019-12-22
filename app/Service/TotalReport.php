@@ -42,7 +42,7 @@ class TotalReport
         }
 
         $fileName = 'total-' . $date->format('Y-m-dTH-i-s') . '.csv';
-        $fileFullPath = storage_path(config('admin.path.reports') . $fileName);
+        $fileFullPath = \Storage::path(config('admin.path.reports') . $fileName);
 
         $csv = \League\Csv\Writer::createFromPath($fileFullPath, 'w+');
         $csv->insertAll($content);
