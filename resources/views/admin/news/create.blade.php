@@ -10,16 +10,15 @@
 
         @csrf
 
-        @include('layout.form.slug')
-        @include('layout.form.title')
-        @include('layout.form.abstract')
-        @include('layout.form.body')
-        @include('layout.form.tags')
-        @include('layout.form.is_active')
+        @include('layout.input.slug')
+        @include('layout.input.title')
+        @include('layout.input.abstract')
+        @include('layout.input.body')
+        @include('layout.input.tags')
+        @include('layout.input.is_active')
 
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Создать новость</button>
-        </div>
+        @include('layout.input.submit', ['text' => 'Создать новость'])
+
     </form>
 
 @endsection

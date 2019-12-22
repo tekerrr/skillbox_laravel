@@ -11,25 +11,22 @@
         @csrf
         @method('PATCH')
 
-        @include('layout.form.slug', ['default' => $post->slug])
-        @include('layout.form.title', ['default' => $post->title])
-        @include('layout.form.abstract', ['default' => $post->abstract])
-        @include('layout.form.body', ['default' => $post->body])
-        @include('layout.form.tags', ['default' => $post->tags->pluck('name')->implode(', ')])
-        @include('layout.form.is_active', ['default' => $post->isActive()])
+        @include('layout.input.slug', ['default' => $post->slug])
+        @include('layout.input.title', ['default' => $post->title])
+        @include('layout.input.abstract', ['default' => $post->abstract])
+        @include('layout.input.body', ['default' => $post->body])
+        @include('layout.input.tags', ['default' => $post->tags->pluck('name')->implode(', ')])
+        @include('layout.input.is_active', ['default' => $post->isActive()])
 
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Обновить</button>
-        </div>
+        @include('layout.input.submit', ['text' => 'Обновить'])
+
     </form>
 
     <form method="POST" action="{{ route('posts.destroy', compact('post')) }}">
         @csrf
         @method('DELETE')
 
-        <div class="form-group">
-            <button type="submit" class="btn btn-outline-danger">Удалить</button>
-        </div>
+        @include('layout.input.submit', ['text' => 'Удалить', 'type' => 'outline-danger'])
     </form>
 
 @endsection

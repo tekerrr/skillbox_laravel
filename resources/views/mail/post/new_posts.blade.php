@@ -5,6 +5,6 @@
 - [{{ $post->title }}](route('posts.show', compact('post')))
 @endforeach
 
-Thanks,<br>
+Thanks,
 {{ config('app.name') }}
 @endcomponent
