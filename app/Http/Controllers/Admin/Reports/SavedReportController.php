@@ -20,4 +20,12 @@ class SavedReportController extends Controller
     {
         return \Storage::download(config('admin.path.reports') . $file);
     }
+
+    public function destroyAll()
+    {
+        \Storage::delete(\Storage::files(config('admin.path.reports')));
+
+        flash('Все отчёты удалены!');
+        return back();
+    }
 }

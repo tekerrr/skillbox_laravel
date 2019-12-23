@@ -10,4 +10,11 @@
             <li>Отчёты отсутствуют</li>
         @endforelse
     </ul>
+
+    <form method="POST" action="{{ route('admin.reports.files.destroy-all') }}">
+        @csrf
+        @method('DELETE')
+
+        @include('layout.input.submit', ['text' => 'Удалить все отчёты', 'type' => 'outline-danger'])
+    </form>
 @endsection

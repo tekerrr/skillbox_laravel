@@ -27,6 +27,7 @@ Route::prefix('/admin')->name('admin.')->middleware(['auth', 'role:admin'])->gro
 
     Route::get('/reports/files', 'Admin\Reports\SavedReportController@index')->name('reports.files');
     Route::get('/reports/files/{file}', 'Admin\Reports\SavedReportController@download')->name('reports.files.download');
+    Route::delete('/reports/files', 'Admin\Reports\SavedReportController@destroyAll')->name('reports.files.destroy-all');
 
     Route::get('/posts', 'Admin\PostController@index')->name('posts.index');
     Route::patch('/posts/{post}/activate', 'Admin\PostController@activate')->name('posts.activate');
