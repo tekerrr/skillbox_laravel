@@ -15,4 +15,7 @@
         @include('layout.input.switch', ['name' => 'users', 'text' => 'Пользователей', 'checked' => true])
         @include('layout.input.submit', ['text' => 'Сгенерировать отчет'])
     </form>
+
+    <report-total user-id="{{ auth()->id() }}"></report-total>
+
 @endsection

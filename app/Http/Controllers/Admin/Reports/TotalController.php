@@ -19,7 +19,7 @@ class TotalController extends Controller
             return back();
         }
 
-        \App\Jobs\TotalReport::dispatch(array_keys($attributes), auth()->user()->email);
+        \App\Jobs\TotalReport::dispatch(array_keys($attributes), auth()->user());
 
         flash('Сгенерированный отчет будет выслан на почту.');
         return back();

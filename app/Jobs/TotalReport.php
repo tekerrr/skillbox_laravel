@@ -13,12 +13,12 @@ class TotalReport implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $items;
-    protected $email;
+    protected $user;
 
-    public function __construct(array $items, string $email)
+    public function __construct(array $items, \App\User $user)
     {
         $this->items = $items;
-        $this->email = $email;
+        $this->user = $user;
     }
 
     /**
@@ -31,6 +31,9 @@ class TotalReport implements ShouldQueue
         $report = new \App\Service\TotalReport($this->items);
         $report->generate();
 
-        \Mail::to($this->email)->send(new \App\Mail\Reports\Total($report->getReport(), $report->saveAsCsv()));
+        $mail = new \App\Mail\Reports\Total($report->getReport(), $report->saveAsCsv());
+        \Mail::to($this->user->email)->send($mail);
+
+        broadcast(new \App\Events\CreatedTotalReport($report->getReport(), $this->user->id));
     }
 }
