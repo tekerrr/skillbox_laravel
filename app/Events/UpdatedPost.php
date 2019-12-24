@@ -10,24 +10,31 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SomethingHappens implements ShouldBroadcast
+class UpdatedPost implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $whatHappens;
+    public $post;
 
-    public function __construct($whatHappens)
+    public function __construct(\App\Post $post)
     {
-        $this->whatHappens = $whatHappens;
+        $this->post = $post;
     }
 
     public function broadcastOn()
     {
-        return new Channel('hello');
+        return new PresenceChannel('admin');
     }
 
     public function broadcastWith()
     {
-        return ['what' => $this->whatHappens];
+        $after = json_decode($this->post->history()->first()->pivot->after, true);
+        $fields = implode(', ', array_keys($after));
+
+        return [
+            'title' => $this->post->title,
+            'changes' => $fields,
+            'href'  => route('posts.show', $this->post),
+        ];
     }
 }

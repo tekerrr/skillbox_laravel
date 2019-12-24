@@ -24,6 +24,8 @@
 
         @include('layout.flash_message')
 
+        <toast-messages></toast-messages>
+
         <div class="row">
 
             @section('body')
