@@ -37,13 +37,13 @@ class Report
         \League\Csv\Writer::createFromPath($this->getFullPath($name), 'w+')->insertAll($data);
     }
 
+    public function delete($reports)
+    {
+        $this->disk->delete($reports);
+    }
+
     public function deleteAll()
     {
         $this->delete($this->getAll());
-    }
-
-    private function delete($reports)
-    {
-        $this->disk->delete($reports);
     }
 }
