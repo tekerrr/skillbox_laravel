@@ -5,10 +5,11 @@ namespace Tests\Unit;
 use App\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\WithRoles;
 
 class CanBeActivatedTraitWithPostClassTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithRoles;
 
     /** @test */
     public function method_active_returns_only_published_posts()
@@ -55,6 +56,7 @@ class CanBeActivatedTraitWithPostClassTest extends TestCase
     public function a_post_can_be_activated()
     {
         // Arrange
+        $this->actingAsUser();
         $post = factory(Post::class)->create(['is_active' => false]);
 
         // Act
@@ -68,6 +70,7 @@ class CanBeActivatedTraitWithPostClassTest extends TestCase
     public function a_post_can_be_deactivated()
     {
         // Arrange
+        $this->actingAsUser();
         $post = factory(Post::class)->create(['is_active' => true]);
 
         // Act
