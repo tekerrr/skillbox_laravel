@@ -3,27 +3,23 @@
 namespace App\Http\Controllers\Admin\Reports;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Service\Report\Report;
 
 class SavedReportController extends Controller
 {
-    public function index()
+    public function index(Report $report)
     {
-        $files = \Storage::files(config('admin.path.reports'));
-        $files = collect($files)->map(function ($file) {
-            return short_path($file);
-        });
-        return view('admin.reports.saved-report', compact('files'));
+        return view('admin.reports.saved-report', ['files' => $report->getAll()]);
     }
 
-    public function download($file)
+    public function download(Report $report, $file)
     {
-        return \Storage::download(config('admin.path.reports') . $file);
+        return $report->download($file) ?? abort(404);
     }
 
-    public function destroyAll()
+    public function destroyAll(Report $report)
     {
-        \Storage::delete(\Storage::files(config('admin.path.reports')));
+        $report->deleteAll();
 
         flash('Все отчёты удалены!');
         return back();

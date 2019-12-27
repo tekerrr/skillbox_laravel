@@ -5,7 +5,7 @@
         - {{ $key }}: {{ $value }}
     @endforeach
 
-    Приложенный файл: {{ $csvName }}
+    Приложенный файл: {{ $csv }}
 
     С уважением,
     {{ config('app.name') }}

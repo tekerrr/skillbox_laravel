@@ -28,7 +28,7 @@ class TotalReport implements ShouldQueue
      */
     public function handle()
     {
-        $report = new \App\Service\TotalReport($this->items);
+        $report = new \App\Service\Report\TotalReport($this->items);
         $report->generate();
 
         $mail = new \App\Mail\Reports\Total($report->getReport(), $report->saveAsCsv());

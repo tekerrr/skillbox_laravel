@@ -13,13 +13,11 @@ class Total extends Mailable
 
     public $report;
     public $csv;
-    public $csvName;
 
     public function __construct($report, $csv)
     {
         $this->report = $report;
         $this->csv = $csv;
-        $this->csvName = short_path($csv);
     }
 
     public function build()
@@ -27,7 +25,7 @@ class Total extends Mailable
         return $this
             ->markdown('admin.mail.reports.total')
             ->subject('Сгенерирован отчёт: Итого')
-            ->attach($this->csv)
+            ->attach(app(\App\Service\Report\Report::class)->getFullPath($this->csv))
         ;
     }
 }

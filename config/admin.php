@@ -9,8 +9,4 @@ return [
         'email'    => env('SUPER_ADMIN_EMAIL', 'super_admin@test.ru'),
         'password' => env('SUPER_ADMIN_PASSWORD', 'admin'),
     ],
-
-    'path' => [
-        'reports' => 'reports/',
-    ],
 ];

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Service;
+namespace App\Service\Report;
 
 
 class TotalReport
@@ -41,13 +41,10 @@ class TotalReport
             $content[] = [$key, $value];
         }
 
-        $fileName = 'total-' . $date->format('Y-m-dTH-i-s') . '.csv';
-        $fileFullPath = \Storage::path(config('admin.path.reports') . $fileName);
+        $name = 'total-' . $date->format('Y-m-dTH-i-s') . '.csv';
+        app(Report::class)->saveAsCsv($name, $content);
 
-        $csv = \League\Csv\Writer::createFromPath($fileFullPath, 'w+');
-        $csv->insertAll($content);
-
-        return $fileFullPath;
+        return $name;
     }
 
     private function getClass($item): ?string
