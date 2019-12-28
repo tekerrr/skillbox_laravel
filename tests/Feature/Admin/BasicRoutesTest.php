@@ -100,4 +100,46 @@ class BasicRoutesTest extends TestCase
         $response->assertSeeText('Статистика портала');
         $response->assertViewIs('admin.statistics');
     }
+
+    /** @test */
+    public function an_admin_can_view_the_admin_reports_page()
+    {
+        // Arrange
+        $this->actingAsAdmin();
+
+        // Act
+        $response = $this->get('/admin/reports');
+
+        // Assert
+        $response->assertSeeText('Отчёты');
+        $response->assertViewIs('admin.reports.index');
+    }
+
+    /** @test */
+    public function an_admin_can_view_the_admin_total_report_page()
+    {
+        // Arrange
+        $this->actingAsAdmin();
+
+        // Act
+        $response = $this->get('/admin/reports/total');
+
+        // Assert
+        $response->assertSeeText('Отчёт: Итого');
+        $response->assertViewIs('admin.reports.total');
+    }
+
+    /** @test */
+    public function an_admin_can_view_the_admin_saved_report_list_page()
+    {
+        // Arrange
+        $this->actingAsAdmin();
+
+        // Act
+        $response = $this->get('/admin/reports/files');
+
+        // Assert
+        $response->assertSeeText('Сохранённые отчёты');
+        $response->assertViewIs('admin.reports.saved-report');
+    }
 }

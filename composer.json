@@ -12,9 +12,12 @@
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.4",
         "laravel/framework": "^6.0",
+        "laravel/horizon": "^3.4",
         "laravel/telescope": "^2.1",
         "laravel/tinker": "^1.0",
-        "laravel/ui": "^1.1"
+        "laravel/ui": "^1.1",
+        "league/csv": "^9.5",
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.6",

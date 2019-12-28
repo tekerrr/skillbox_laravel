@@ -16,6 +16,7 @@ class PostTest extends TestCase
     public function the_class_is_using_can_be_activated_trait_correctly()
     {
         // Arrange
+        $this->actingAsUser();
         $elements = factory(Post::class, 2)->create(['is_active' => false]);
 
         // Act

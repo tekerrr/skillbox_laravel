@@ -3,6 +3,6 @@
 
 {{ $post->abstract }}
 
-С уважением,<br>
+С уважением,
 {{ config('app.name') }}
 @endcomponent

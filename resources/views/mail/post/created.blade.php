@@ -7,6 +7,6 @@
 Прочитать статью
 @endcomponent
 
-С уважением,<br>
+С уважением,
 {{ config('app.name') }}
 @endcomponent

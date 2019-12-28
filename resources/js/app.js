@@ -16,10 +16,24 @@ window.Vue = require('vue');
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
+//
+
+import BootstrapVue from 'bootstrap-vue';
+Vue.use(BootstrapVue);
+
+import PortalVue from 'portal-vue';
+Vue.use(PortalVue);
+
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
+
+
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+
+Vue.component('report-total', require('./components/TotalReport.vue').default);
+Vue.component('toast-messages', require('./components/ToastMessages.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -8,5 +8,6 @@
         <li><a href="{{ route('admin.news.index') }}">Список новостей</a></li>
         <li><a href="{{ route('admin.feedback.index') }}">Список обращений</a></li>
         <li><a href="{{ route('admin.statistics.index') }}">Статистика портала</a></li>
+        <li><a href="{{ route('admin.reports.index') }}">Отчёты</a></li>
     </ul>
 @endsection
