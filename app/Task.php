@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -42,6 +41,18 @@ class Task extends Model
                 'before' => json_encode(\Arr::only($task->fresh()->toArray(), array_keys($after))),
                 'after'  => json_encode($after),
             ]);
+        });
+
+        static::created(function () {
+            \Cache::tags(['tasks'])->flush();
+        });
+
+        static::updated(function () {
+            \Cache::tags(['tasks'])->flush();
+        });
+
+        static::deleted(function () {
+            \Cache::tags(['tasks'])->flush();
         });
     }
 
@@ -132,17 +143,7 @@ class Task extends Model
 
     public function newCollection(array $models = [])
     {
-        return new class($models) extends Collection {
-            public function allCompleted()
-            {
-                return $this->filter->isCompleted();
-            }
-
-            public function allNotCompleted()
-            {
-                return $this->filter->isNotCompleted();
-            }
-        };
+        return new TasksCollection($models);
     }
 
     public function history()

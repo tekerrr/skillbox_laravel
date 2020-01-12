@@ -17,7 +17,9 @@ class TasksController extends Controller
 
     public function index()
     {
-        $tasks = auth()->user()->tasks()->with('tags')->latest()->simplePaginate(2);
+        $tasks = \Cache::tags(['tasks'])->remember('user_tasks|' . auth()->id(), '3600', function () {
+            return auth()->user()->tasks()->with('tags')->latest()->simplePaginate(2);
+        });
 
 //        $tasks->withPath('/custom/url');
 

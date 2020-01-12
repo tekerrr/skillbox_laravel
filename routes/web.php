@@ -290,10 +290,86 @@ Route::get('/test3', function () {
 //    });
 });
 
-Route::get('/test', function () {
+Route::get('/test4', function () {
     event(new \App\Events\SomethingHappens('Мы настроили WS-соединение!'));
 });
 
 Route::post('/chat', function () {
     broadcast(new \App\Events\ChatMessage(request('message'), auth()->user()))->toOthers();
 })->middleware('auth');
+
+Route::get('/test', function () {
+//    Cache::put('key', 200, 10);
+//    $value = Cache::get('key');
+
+//    $count = Cache::remember('task_count', 3600, function () {
+//        return \App\Task::count();
+//    });
+//    dump($count);
+//
+//    $count = Cache::rememberForever('task_count', function () {
+//        return \App\Task::count();
+//    });
+//
+//    $value = Cache::pull('key');
+//    Cache::put('key', 'value', $secons ?? 10);
+//    Cache::add('key', 'value', $secons ?? 10);
+//    Cache::forget('key');
+//    Cache::flush();
+//
+//    dump($count);
+
+//    $lock = Cache::lock('foo', 10);
+//
+//    if ($lock->get()) {
+
+//
+//        $lock->release();
+//    }
+
+//    Cache::lock('foo', 10)->get(function () {
+//
+//    });
+
+//    $lock = Cache::lock('foo', 10);
+//
+//    try {
+//        $lock->block(5);
+//    } catch (\Illuminate\Contracts\Cache\LockTimeoutException $e) {
+//        //
+//    } finally {
+//        optional($lock)->release();
+//    }
+
+//    Cache::lock('foo', 10)->block(5, function () {
+//        //
+//    });
+
+//    // Controller
+//    $task = \App\Task::find($id);
+//    $lock = Cache::lock('foo', 120);
+//
+//    if ($result = $lock->get()) {
+//        ProcessTask::dispatch($task, $lock->ownre());
+//    }
+//
+//    // ProcessTask Job
+//    Cache::restoreLock('foo', $this->owner)->release();
+//
+//    Cache::lock('foo')->forceRelease();
+
+//    cache()->remember('foo', 10, function () {return 'test';});
+
+//    Cache::tags(['people', 'artists'])->put('John', 'John', 3600);
+//    Cache::tags(['people', 'authors'])->put('Anne', 'Anne', 3600);
+//
+//    Cache::tags(['people', 'artists'])->get('John');
+//    Cache::tags(['people', 'authors'])->get('Anne');
+//
+//    $john = Cache::tags(['people', 'authors'])->remember('John', 3600, function () {
+//        return 'John';
+//    });
+//
+//    Cache::tags(['people'])->flush();
+
+});
