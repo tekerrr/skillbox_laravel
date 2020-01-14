@@ -18,7 +18,9 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = Post::active()->latest()->with('tags')->simplePaginate(10);
+        $posts = \Cache::tags(['posts', 'tags'])->remember('posts|' . page(), $this->getCacheTtl(), function () {
+            return Post::active()->latest()->with('tags')->simplePaginate(10);
+        });
 
         return view('posts.index', compact('posts'));
     }
@@ -42,9 +44,12 @@ class PostController extends Controller
         return redirect()->route('posts.index');
     }
 
-    public function show(Post $post)
+    public function show($post)
     {
-        $post->load('comments', 'comments.user');
+        $post = \Cache::tags(['posts', 'tags', 'comments|' . $post, 'post|' . $post])
+            ->remember('post|' . $post, $this->getCacheTtl(), function () use ($post) {
+                return Post::getBinding($post)->load('tags', 'comments.user', 'history');
+            });
 
         return view('posts.show', compact('post'));
     }

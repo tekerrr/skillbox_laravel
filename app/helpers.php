@@ -20,7 +20,7 @@ if (! function_exists('push_all_to_admin')) {
      */
     function push_all_to_admin($title = null, $text = null)
     {
-        if (is_null($title) && is_null($text)) {
+        if (is_null($title) && is_null($text)){
             return app(\App\Service\PushAllToAdmin::class);
         }
 
@@ -33,7 +33,16 @@ if (! function_exists('short_path')) {
      * @param string $path
      * @return string
      */
-    function short_path(string $path): string {
+    function short_path(string $path): string
+    {
         return collect(explode('/', trim($path, '/')))->last();
+    }
+}
+
+
+if (! function_exists('page')) {
+    function page(): string
+    {
+        return request('page', '1');
     }
 }
