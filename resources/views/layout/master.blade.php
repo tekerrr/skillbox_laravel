@@ -73,7 +73,7 @@
 
         </div>
 
-        <chat></chat>
+{{--        <chat></chat>--}}
 
     </main>
 
