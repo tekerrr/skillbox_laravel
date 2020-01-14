@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class News extends Model
 {
     use CanBeActivated;
+    use CanBeBinding;
 
     protected $fillable = ['slug', 'title', 'abstract', 'body', 'is_active'];
 

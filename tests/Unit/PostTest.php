@@ -28,6 +28,19 @@ class PostTest extends TestCase
     }
 
     /** @test */
+    public function the_class_is_using_can_be_binding_trait_correctly()
+    {
+        // Arrange
+        $post = factory(Post::class)->create();
+
+        // Act
+        $response = Post::getBinding($post->slug);
+
+        // Assert
+        $this->assertEquals($post->title, $response->title);
+    }
+
+    /** @test */
     public function a_post_has_a_user()
     {
         // Arrange

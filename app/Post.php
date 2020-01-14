@@ -7,6 +7,7 @@ use Illuminate\Support\Arr;
 class Post extends \Illuminate\Database\Eloquent\Model
 {
     use CanBeActivated;
+    use CanBeBinding;
 
     protected $fillable = ['owner_id', 'slug', 'title', 'abstract', 'body', 'is_active'];
 

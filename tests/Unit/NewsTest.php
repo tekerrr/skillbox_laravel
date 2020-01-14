@@ -26,6 +26,19 @@ class NewsTest extends TestCase
     }
 
     /** @test */
+    public function the_class_is_using_can_be_binding_trait_correctly()
+    {
+        // Arrange
+        $post = factory(News::class)->create();
+
+        // Act
+        $response = News::getBinding($post->slug);
+
+        // Assert
+        $this->assertEquals($post->title, $response->title);
+    }
+
+    /** @test */
     public function a_news_can_have_tags()
     {
         // Arrange
