@@ -18,7 +18,7 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = Post::active()->latest()->simplePaginate(10);
+        $posts = Post::active()->latest()->with('tags')->simplePaginate(10);
 
         return view('posts.index', compact('posts'));
     }
