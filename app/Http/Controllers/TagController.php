@@ -9,8 +9,15 @@ class TagController extends Controller
 {
     public function show(Tag $tag)
     {
-        $news = $tag->news()->active()->with('tags')->latest()->get();
-        $posts = $tag->posts()->active()->with('tags')->latest()->get();
+        $news = \Cache::tags(['news', 'tags'])
+            ->remember('news_tag|' . $tag->name, $this->getCacheTtl(), function () use ($tag) {
+                return $tag->news()->active()->with('tags')->latest()->get();
+            });
+
+        $posts = \Cache::tags(['posts', 'tags'])
+            ->remember('posts_tag|' . $tag->name, $this->getCacheTtl(), function () use ($tag) {
+                return $tag->posts()->active()->with('tags')->latest()->get();
+            });
 
         return view('tags.show', compact('news', 'posts'));
     }

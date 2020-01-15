@@ -2,16 +2,13 @@
 
 namespace App;
 
-class Post extends CachedModel
+class Post extends \Illuminate\Database\Eloquent\Model
 {
     use CanBeActivated;
     use CanBeBinding;
 
     protected $fillable = ['owner_id', 'slug', 'title', 'abstract', 'body', 'is_active'];
     protected $casts = ['is_active' => 'boolean'];
-
-    protected $singularCacheTag = 'post';
-    protected $pluralCacheTag = 'posts';
 
     protected static function boot()
     {
@@ -27,8 +24,20 @@ class Post extends CachedModel
         static::deleting(function (Post $post) {
             $post->comments()->delete();
         });
-    }
 
+        // Cache
+        static::created(function () {
+            \Cache::tags('posts')->flush();
+        });
+
+        static::updated(function (Post $post) {
+            \Cache::tags(['posts', 'post|' . $post->getOriginal('slug')])->flush();
+        });
+
+        static::deleted(function (Post $post) {
+            \Cache::tags(['posts', 'post|' . $post->getOriginal('slug')])->flush();
+        });
+    }
 
     public function getRouteKeyName()
     {

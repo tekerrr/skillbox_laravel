@@ -2,15 +2,12 @@
 
 namespace App;
 
-class News extends CachedModel
+class News extends \Illuminate\Database\Eloquent\Model
 {
     use CanBeActivated;
     use CanBeBinding;
 
     protected $fillable = ['slug', 'title', 'abstract', 'body', 'is_active'];
-
-    protected $singularCacheTag = 'a_news';
-    protected $pluralCacheTag = 'news';
 
     protected static function boot()
     {
@@ -18,6 +15,19 @@ class News extends CachedModel
 
         static::deleting(function (News $news) {
             $news->comments()->delete();
+        });
+
+        // Cache
+        static::created(function () {
+            \Cache::tags('news')->flush();
+        });
+
+        static::updated(function (News $news) {
+            \Cache::tags(['news', 'a_news|' . $news->getOriginal('slug')])->flush();
+        });
+
+        static::deleted(function (News $news) {
+            \Cache::tags(['news', 'a_news|' . $news->getOriginal('slug')])->flush();
         });
     }
 
