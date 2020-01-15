@@ -34,7 +34,7 @@ class PostTest extends TestCase
         $post = factory(Post::class)->create();
 
         // Act
-        $response = Post::getBinding($post->slug);
+        $response = Post::getBindingModel($post->slug);
 
         // Assert
         $this->assertEquals($post->title, $response->title);

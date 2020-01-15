@@ -32,7 +32,7 @@ class NewsTest extends TestCase
         $post = factory(News::class)->create();
 
         // Act
-        $response = News::getBinding($post->slug);
+        $response = News::getBindingModel($post->slug);
 
         // Assert
         $this->assertEquals($post->title, $response->title);

@@ -2,16 +2,16 @@
 
 namespace App;
 
-use Illuminate\Support\Arr;
-
-class Post extends \Illuminate\Database\Eloquent\Model
+class Post extends CachedModel
 {
     use CanBeActivated;
     use CanBeBinding;
 
     protected $fillable = ['owner_id', 'slug', 'title', 'abstract', 'body', 'is_active'];
-
     protected $casts = ['is_active' => 'boolean'];
+
+    protected $singularCacheTag = 'post';
+    protected $pluralCacheTag = 'posts';
 
     protected static function boot()
     {
@@ -20,7 +20,7 @@ class Post extends \Illuminate\Database\Eloquent\Model
         static::updating(function (Post $post) {
             $post->history()->attach(auth()->id(), [
                 'after' => json_encode($after = $post->getDirty()),
-                'before' => json_encode(Arr::only($post->getOriginal(), array_keys($after))),
+                'before' => json_encode(\Arr::only($post->getOriginal(), array_keys($after))),
             ]);
         });
 
@@ -59,5 +59,4 @@ class Post extends \Illuminate\Database\Eloquent\Model
             ->orderByDesc('pivot_created_at')
         ;
     }
-
 }

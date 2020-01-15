@@ -1,13 +1,13 @@
 <?php
 
-
 namespace App;
-
 
 trait CanBeBinding
 {
-    public static function getBinding(string $value): ?self
+    public static function getBindingModel(string $value): self
     {
-        return (new static())->resolveRouteBinding($value);
+        abort_if(! $model = (new static())->resolveRouteBinding($value), 404);
+
+        return $model;
     }
 }

@@ -15,6 +15,7 @@
             <th scope="col">Дата создания</th>
             <th scope="col">Статус</th>
             <th scope="col">Дейсвтие</th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
@@ -34,6 +35,13 @@
                 </td>
                 <td>
                     <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.news.edit', ['news' => $oneNews]) }}">Изменить</a>
+                </td>
+                <td>
+                    <form method="POST" action="{{ route('admin.news.destroy', ['news' => $oneNews]) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                    </form>
                 </td>
             </tr>
         @endforeach

@@ -2,14 +2,15 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class News extends Model
+class News extends CachedModel
 {
     use CanBeActivated;
     use CanBeBinding;
 
     protected $fillable = ['slug', 'title', 'abstract', 'body', 'is_active'];
+
+    protected $singularCacheTag = 'a_news';
+    protected $pluralCacheTag = 'news';
 
     protected static function boot()
     {

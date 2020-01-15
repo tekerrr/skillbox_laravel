@@ -21,19 +21,19 @@ class CanBeBindingTraitWithPostClassTest extends TestCase
         factory(Post::class)->create();
 
         // Act
-        $response = Post::getBinding($post->slug);
+        $response = Post::getBindingModel($post->slug);
 
         // Assert
         $this->assertEquals($post->title, $response->title);
     }
 
     /** @test */
-    public function method_get_binding_returns_null_when_key_not_exists()
+    public function method_get_binding_throws_exception_when_key_not_exists()
     {
-        // Act
-        $response = Post::getBinding($this->faker->word);
+        // Arrange
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
 
-        // Assert
-        $this->assertNull($response);
+        // Act
+        $response = Post::getBindingModel($this->faker->word);
     }
 }

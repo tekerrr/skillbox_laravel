@@ -44,12 +44,17 @@ class PostController extends Controller
         return redirect()->route('posts.index');
     }
 
-    public function show($post)
+    public function show($slug)
     {
-        $post = \Cache::tags(['posts', 'tags', 'comments|' . $post, 'post|' . $post])
-            ->remember('post|' . $post, $this->getCacheTtl(), function () use ($post) {
-                return Post::getBinding($post)->load('tags', 'comments.user', 'history');
-            });
+        $cache = \Cache::tags([
+            'post|' . $slug,
+            'tags',
+            'users',
+        ]);
+
+        $post = $cache->remember('post|' . $slug, $this->getCacheTtl(), function () use ($slug) {
+            return Post::getBindingModel($slug)->load('tags', 'comments.user', 'history');
+        });
 
         return view('posts.show', compact('post'));
     }
