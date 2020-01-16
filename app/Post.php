@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Service\TaggedCache;
+
 class Post extends \Illuminate\Database\Eloquent\Model
 {
     use CanBeActivated;
@@ -27,15 +29,15 @@ class Post extends \Illuminate\Database\Eloquent\Model
 
         // Cache
         static::created(function () {
-            \Cache::tags('posts')->flush();
+            self::flushCache();
         });
 
         static::updated(function (Post $post) {
-            \Cache::tags(['posts', 'post|' . $post->getOriginal('slug')])->flush();
+            self::flushCache($post);
         });
 
         static::deleted(function (Post $post) {
-            \Cache::tags(['posts', 'post|' . $post->getOriginal('slug')])->flush();
+            self::flushCache($post);
         });
     }
 
@@ -67,5 +69,11 @@ class Post extends \Illuminate\Database\Eloquent\Model
             ->withTimestamps()
             ->orderByDesc('pivot_created_at')
         ;
+    }
+
+    private static function flushCache(Post $post = null)
+    {
+        $cache = $post ? TaggedCache::post($post) : TaggedCache::posts();
+        $cache->flush();
     }
 }

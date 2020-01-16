@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         \View::composer('layout.sidebar', function ($view) {
-            $tags = \Cache::tags(['tags', 'posts', 'news'])->remember('tagsCloud', config('cache.ttl.content'), function () {
+            $tags = \App\Service\TaggedCache::tags()->remember('tagsCloud', function () {
                 return \App\Tag::tagsCloud();
             });
 

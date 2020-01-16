@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePost;
 use App\Http\Requests\UpdatePost;
 use App\Post;
+use App\Service\TaggedCache;
 use App\Tag;
 
 class PostController extends Controller
@@ -18,7 +19,7 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = \Cache::tags(['posts', 'tags'])->remember('posts|' . page(), $this->getCacheTtl(), function () {
+        $posts = TaggedCache::posts()->remember('posts|' . page(), function () {
             return Post::active()->latest()->with('tags')->simplePaginate(10);
         });
 
@@ -46,13 +47,9 @@ class PostController extends Controller
 
     public function show($slug)
     {
-        $cache = \Cache::tags([
-            'post|' . $slug,
-            'tags',
-            'users',
-        ]);
+//        \Cache::flush();
 
-        $post = $cache->remember('post|' . $slug, $this->getCacheTtl(), function () use ($slug) {
+        $post = TaggedCache::post($slug)->remember('post|' . $slug, function () use ($slug) {
             return Post::getBindingModel($slug)->load('tags', 'comments.user', 'history');
         });
 

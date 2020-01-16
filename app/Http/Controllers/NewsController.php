@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\News;
+use App\Service\TaggedCache;
 
 class NewsController extends Controller
 {
@@ -13,7 +14,7 @@ class NewsController extends Controller
 
     public function index()
     {
-        $news = \Cache::tags(['news', 'tags'])->remember('a_news|' . page(), $this->getCacheTtl(), function () {
+        $news = TaggedCache::news()->remember('a_news|' . page(), function () {
             return News::active()->latest()->with('tags')->simplePaginate(5);
         });
 
@@ -22,13 +23,7 @@ class NewsController extends Controller
 
     public function show($slug)
     {
-        $cache = \Cache::tags([
-            'a_news|' . $slug,
-            'tags',
-            'users',
-        ]);
-
-        $news = $cache->remember('a_news|' . $slug, $this->getCacheTtl(), function () use ($slug) {
+        $news = TaggedCache::aNews($slug)->remember('a_news|' . $slug, function () use ($slug) {
             return News::getBindingModel($slug)->load('tags', 'comments.user');
         });
 

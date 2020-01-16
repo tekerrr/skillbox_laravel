@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Illuminate\Support\Collection;
+use App\Service\TaggedCache;
 
 class Tag extends \Illuminate\Database\Eloquent\Model
 {
@@ -14,15 +14,15 @@ class Tag extends \Illuminate\Database\Eloquent\Model
 
         // Cache
         static::created(function () {
-            \Cache::tags('tags')->flush();
+            self::flushCache();
         });
 
-        static::updated(function (Tag $tag) {
-            \Cache::tags(['tags', 'posts_tag|' . $tag->name, 'news_tag|' . $tag->name])->flush();
+        static::updated(function () {
+            self::flushCache();
         });
 
-        static::deleted(function (Tag $tag) {
-            \Cache::tags(['tags', 'posts_tag|' . $tag->name, 'news_tag|' . $tag->name])->flush();
+        static::deleted(function () {
+            self::flushCache();
         });
     }
 
@@ -33,13 +33,15 @@ class Tag extends \Illuminate\Database\Eloquent\Model
 
         $taggable->tags()->attach(Tag::getIds($newTags->diffKeys($currentTags)));
         $taggable->tags()->detach(Tag::getIds($currentTags->diffKeys($newTags)));
+
+        self::flushCache();
     }
 
     protected static function getIds($names)
     {
-        return collect($names)->map(function ($name) {
-            return Tag::firstOrCreate(['name' => $name])->id;
-        });
+        return collect($names)->map(function ($value, $key) {
+            return Tag::firstOrCreate(['name' => $key])->id;
+        })->values();
     }
 
     public static function tagsCloud()
@@ -55,5 +57,10 @@ class Tag extends \Illuminate\Database\Eloquent\Model
     public function news()
     {
         return $this->morphedByMany(News::class, 'taggable');
+    }
+
+    private static function flushCache()
+    {
+        TaggedCache::tags()->flush();
     }
 }

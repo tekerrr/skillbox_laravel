@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Service\TaggedCache;
+
 class News extends \Illuminate\Database\Eloquent\Model
 {
     use CanBeActivated;
@@ -19,15 +21,15 @@ class News extends \Illuminate\Database\Eloquent\Model
 
         // Cache
         static::created(function () {
-            \Cache::tags('news')->flush();
+            TaggedCache::news()->flush();
         });
 
         static::updated(function (News $news) {
-            \Cache::tags(['news', 'a_news|' . $news->getOriginal('slug')])->flush();
+            TaggedCache::aNews($news)->flush();
         });
 
         static::deleted(function (News $news) {
-            \Cache::tags(['news', 'a_news|' . $news->getOriginal('slug')])->flush();
+            TaggedCache::aNews($news)->flush();
         });
     }
 
@@ -44,5 +46,11 @@ class News extends \Illuminate\Database\Eloquent\Model
     public function comments()
     {
         return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    private static function flushCache(News $news = null)
+    {
+        $cache = $news ? TaggedCache::aNews($news) : TaggedCache::news();
+        $cache->flush();
     }
 }
