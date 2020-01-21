@@ -49,8 +49,6 @@ class PostController extends Controller
 
     public function show($slug)
     {
-//        \Cache::flush();
-
         $post = TaggedCache::post($slug)
             ->with(TaggedCache::tags())
             ->with(TaggedCache::users())

@@ -20,6 +20,16 @@ class TaggedCache
         return new self('tags');
     }
 
+    public static function feedbacks(): self
+    {
+        return new self('feedbacks');
+    }
+
+    public static function comments(): self
+    {
+        return new self('comments');
+    }
+
     public static function posts(): self
     {
         return (new self('posts'));

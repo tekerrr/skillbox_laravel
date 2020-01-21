@@ -22,7 +22,6 @@ class Statistics
             $this->run();
         }
 
-
         return $this->data;
     }
 
@@ -41,8 +40,7 @@ class Statistics
             ->having('posts_count', '>', '1')
             ->groupBy('owner_id')
             ->pluck('posts_count')
-            ->avg()
-        ;
+            ->avg();
 
         return ['posts' => [
             'number' => Post::count(),
@@ -71,8 +69,7 @@ class Statistics
             ->groupBy('owner_id')
             ->orderByDesc('posts_count')
             ->first()
-            ->user
-        ;
+            ->user;
 
         return ['mostProductiveAuthor' => ['name' => $author->name]];
     }
@@ -81,8 +78,7 @@ class Statistics
     {
         $post = Post::selectRaw('title, slug,  CHAR_LENGTH(body) as body_length')
             ->orderByDesc('body_length')
-            ->first()
-        ;
+            ->first();
 
         return ['longestPost' => [
             'href' => route('posts.show', compact('post')),
@@ -95,8 +91,7 @@ class Statistics
     {
         $post = Post::selectRaw('title, slug,  CHAR_LENGTH(body) as body_length')
             ->orderBy('body_length')
-            ->first()
-        ;
+            ->first();
 
         return ['shortestPost' => [
             'href' => route('posts.show', compact('post')),
@@ -110,8 +105,7 @@ class Statistics
         $post = Post::select('title', 'slug')
             ->withCount('history')
             ->orderByDesc('history_count')
-            ->first()
-        ;
+            ->first();
 
         return ['mostChangedPost' => [
             'href' => route('posts.show', compact('post')),
@@ -125,8 +119,7 @@ class Statistics
         $post = Post::select('title', 'slug')
             ->withCount('comments')
             ->orderByDesc('comments_count')
-            ->first()
-        ;
+            ->first();
 
         return ['mostCommentedPost' => [
             'href' => route('posts.show', compact('post')),

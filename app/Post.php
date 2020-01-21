@@ -28,6 +28,11 @@ class Post extends ModelWithCache
         });
     }
 
+    protected static function flushCache(ModelWithCache $post = null)
+    {
+        TaggedCache::post($post)->with(TaggedCache::posts())->flush();
+    }
+
     public function getRouteKeyName()
     {
         return 'slug';
@@ -55,10 +60,5 @@ class Post extends ModelWithCache
             ->withPivot(['before', 'after'])
             ->withTimestamps()
             ->orderByDesc('pivot_created_at');
-    }
-
-    protected static function flushCache(ModelWithCache $post = null)
-    {
-        TaggedCache::post($post)->with(TaggedCache::posts())->flush();
     }
 }

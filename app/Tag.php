@@ -36,6 +36,11 @@ class Tag extends ModelWithCache
         return (new static)->has('posts')->orHas('news')->orderBy('name')->get();
     }
 
+    protected static function flushCache(ModelWithCache $tag = null)
+    {
+        TaggedCache::tags()->flush();
+    }
+
     public function posts()
     {
         return $this->morphedByMany(Post::class, 'taggable');
@@ -44,10 +49,5 @@ class Tag extends ModelWithCache
     public function news()
     {
         return $this->morphedByMany(News::class, 'taggable');
-    }
-
-    protected static function flushCache(ModelWithCache $tag = null)
-    {
-        TaggedCache::tags()->flush();
     }
 }

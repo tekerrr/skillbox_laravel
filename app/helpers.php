@@ -39,8 +39,10 @@ if (! function_exists('short_path')) {
     }
 }
 
-
 if (! function_exists('page')) {
+    /**
+     * @return string
+     */
     function page(): string
     {
         return request('page', '1');

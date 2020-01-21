@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App;
-
 
 abstract class ModelWithCache extends \Illuminate\Database\Eloquent\Model
 {

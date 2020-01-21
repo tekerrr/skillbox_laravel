@@ -6,7 +6,9 @@ trait CanBeBinding
 {
     public static function getBindingModel(string $value): self
     {
-        abort_if(! $model = (new static())->resolveRouteBinding($value), 404);
+        $model = (new static())->resolveRouteBinding($value);
+
+        abort_if(! $model, 404);
 
         return $model;
     }

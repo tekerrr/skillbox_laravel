@@ -20,6 +20,11 @@ class News extends ModelWithCache
         });
     }
 
+    protected static function flushCache(ModelWithCache $aNews = null)
+    {
+        TaggedCache::aNews($aNews)->with(TaggedCache::news())->flush();
+    }
+
     public function getRouteKeyName()
     {
         return 'slug';
@@ -33,10 +38,5 @@ class News extends ModelWithCache
     public function comments()
     {
         return $this->morphMany(Comment::class, 'commentable');
-    }
-
-    protected static function flushCache(ModelWithCache $aNews = null)
-    {
-        TaggedCache::aNews($aNews)->with(TaggedCache::news())->flush();
     }
 }

@@ -49,6 +49,11 @@ class User extends Authenticatable
         });
     }
 
+    protected static function flushCache()
+    {
+        TaggedCache::users()->flush();
+    }
+
     public function roles()
     {
         return $this->belongsToMany(Role::class);
@@ -84,10 +89,5 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->hasRole('admin');
-    }
-
-    private static function flushCache()
-    {
-        TaggedCache::users()->flush();
     }
 }

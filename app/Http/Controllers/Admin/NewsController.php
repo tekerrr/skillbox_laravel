@@ -6,13 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreNews;
 use App\Http\Requests\UpdateNews;
 use App\News;
+use App\Service\TaggedCache;
 use App\Tag;
 
 class NewsController extends Controller
 {
     public function index()
     {
-        $news = News::latest()->get();
+        $news = TaggedCache::news()->remember('admin.news', function () {
+            return News::latest()->get();
+        });
 
         return view('admin.news.index', compact('news'));
     }
