@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Post;
+use App\Service\TaggedCache;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -146,5 +147,61 @@ class PostTest extends TestCase
 
         // Assert
         $this->assertEquals(2, \App\Comment::count());
+    }
+
+    /** @test */
+    public function creating_post_flushes_posts_cache()
+    {
+        // Arrange
+        TaggedCache::posts()->remember('cache', function () {
+            return $this->faker->words(3, true);
+        });
+
+        // Act
+        factory(Post::class)->create();
+
+        // Assert
+        $this->assertNull(TaggedCache::posts()->getCache()->get('cache'));
+    }
+
+    /** @test */
+    public function updating_post_flushes_posts_cache()
+    {
+        // Arrange
+        $this->actingAsUser();
+        $post = factory(Post::class)->create();
+        TaggedCache::posts()->remember('cache', function () {
+            return $this->faker->words(3, true);
+        });
+        TaggedCache::post($post)->remember('cache', function () {
+            return $this->faker->words(3, true);
+        });
+
+        // Act
+        $post->update(['title' => $this->faker->words(3, true)]);
+
+        // Assert
+        $this->assertNull(TaggedCache::posts()->getCache()->get('cache'));
+        $this->assertNull(TaggedCache::post($post->slug)->getCache()->get('cache'));
+    }
+
+    /** @test */
+    public function deleting_post_flushes_posts_cache()
+    {
+        // Arrange
+        $post = factory(Post::class)->create();
+        TaggedCache::posts()->remember('cache', function () {
+            return $this->faker->words(3, true);
+        });
+        TaggedCache::post($post)->remember('cache', function () {
+            return $this->faker->words(3, true);
+        });
+
+        // Act
+        $post->delete();
+
+        // Assert
+        $this->assertNull(TaggedCache::posts()->getCache()->get('cache'));
+        $this->assertNull(TaggedCache::post($post->slug)->getCache()->get('cache'));
     }
 }

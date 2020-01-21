@@ -88,6 +88,11 @@ class TaggedCache
         return $this->tags;
     }
 
+    public function getCache(): \Illuminate\Cache\TaggedCache
+    {
+        return \Cache::tags($this->tags);
+    }
+
     public function remember($key, Closure $callback, $ttl = null)
     {
         return $this->getCache()->remember($key, $ttl ?? $this->getTtl(), $callback);
@@ -96,11 +101,6 @@ class TaggedCache
     public function flush()
     {
         $this->getCache()->flush();
-    }
-
-    protected function getCache(): \Illuminate\Cache\TaggedCache
-    {
-        return \Cache::tags($this->tags);
     }
 
     protected function getTtl()

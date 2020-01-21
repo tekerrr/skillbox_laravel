@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\User;
+use App\Service\TaggedCache;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\WithRoles;
@@ -134,5 +134,37 @@ class UserTest extends TestCase
 
         // Assert
         $this->assertFalse($response);
+    }
+
+    /** @test */
+    public function updating_username_flushes_users_cache()
+    {
+        // Arrange
+        $user = $this->createUser();
+        TaggedCache::users()->remember('cache', function () {
+            return $this->faker->words(3, true);
+        });
+
+        // Act
+        $user->update(['name' => $this->faker->name]);
+
+        // Assert
+        $this->assertNull(TaggedCache::users()->getCache()->get('cache'));
+    }
+
+    /** @test */
+    public function updating_user_attributes_without_name_flushes_users_cache()
+    {
+        // Arrange
+        $user = $this->createUser();
+        $cache = TaggedCache::users()->remember('cache', function () {
+            return $this->faker->words(3, true);
+        });
+
+        // Act
+        $user->update(['email' => $this->faker->email]);
+
+        // Assert
+        $this->assertEquals($cache, TaggedCache::users()->getCache()->get('cache'));
     }
 }

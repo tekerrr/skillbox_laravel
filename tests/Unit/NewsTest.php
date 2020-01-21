@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\News;
+use App\Service\TaggedCache;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -10,6 +11,7 @@ use Tests\TestCase;
 class NewsTest extends TestCase
 {
     use RefreshDatabase;
+    use WithFaker;
 
     /** @test */
     public function the_class_is_using_can_be_activated_trait_correctly()
@@ -100,5 +102,60 @@ class NewsTest extends TestCase
 
         // Assert
         $this->assertEquals(2, \App\Comment::count());
+    }
+
+    /** @test */
+    public function creating_news_flushes_news_cache()
+    {
+        // Arrange
+        TaggedCache::news()->remember('cache', function () {
+            return $this->faker->words(3, true);
+        });
+
+        // Act
+        factory(News::class)->create();
+
+        // Assert
+        $this->assertNull(TaggedCache::news()->getCache()->get('cache'));
+    }
+
+    /** @test */
+    public function updating_news_flushes_news_cache()
+    {
+        // Arrange
+        $news = factory(News::class)->create();
+        TaggedCache::news()->remember('cache', function () {
+            return $this->faker->words(3, true);
+        });
+        TaggedCache::aNews($news)->remember('cache', function () {
+            return $this->faker->words(3, true);
+        });
+
+        // Act
+        $news->update(['title' => $this->faker->words(3, true)]);
+
+        // Assert
+        $this->assertNull(TaggedCache::news()->getCache()->get('cache'));
+        $this->assertNull(TaggedCache::aNews($news->slug)->getCache()->get('cache'));
+    }
+
+    /** @test */
+    public function deleting_news_flushes_news_cache()
+    {
+        // Arrange
+        $news = factory(News::class)->create();
+        TaggedCache::news()->remember('cache', function () {
+            return $this->faker->words(3, true);
+        });
+        TaggedCache::aNews($news)->remember('cache', function () {
+            return $this->faker->words(3, true);
+        });
+
+        // Act
+        $news->delete();
+
+        // Assert
+        $this->assertNull(TaggedCache::news()->getCache()->get('cache'));
+        $this->assertNull(TaggedCache::aNews($news->slug)->getCache()->get('cache'));
     }
 }
