@@ -36,6 +36,8 @@ class SaveAbstractArticle extends FormRequest
 
     public function getTags()
     {
-        return explode(', ', $this->get('tags'));
+        $tags = $this->get('tags');
+
+        return $tags ? explode(', ', $tags) : null;
     }
 }
