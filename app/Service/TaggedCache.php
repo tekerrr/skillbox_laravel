@@ -8,10 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TaggedCache
 {
     protected static $tagDelimiter = '|';
-
-    protected $basicTag;
-    protected $additionalRememberTags = [];
-    protected $additionalFlushTags = [];
+    protected $tags;
 
     public static function users(): self
     {
@@ -25,14 +22,12 @@ class TaggedCache
 
     public static function posts(): self
     {
-        return (new self('posts'))
-            ->addRememberCacheTag(self::tags());
+        return (new self('posts'));
     }
 
     public static function news(): self
     {
-        return (new self('news'))
-            ->addRememberCacheTag(self::tags());
+        return (new self('news'));
     }
 
     /**
@@ -41,10 +36,7 @@ class TaggedCache
      */
     public static function post($key): self
     {
-        return (new self('post'. self::$tagDelimiter . self::getModelKey($key)))
-            ->addRememberCacheTag(self::tags())
-            ->addRememberCacheTag(self::users())
-            ->addFlushCacheTag(self::posts());
+        return (new self('post'. self::$tagDelimiter . self::getModelKey($key)));
     }
 
     /**
@@ -53,10 +45,7 @@ class TaggedCache
      */
     public static function aNews($key): self
     {
-        return (new self('a_news'. self::$tagDelimiter . self::getModelKey($key)))
-            ->addRememberCacheTag(self::tags())
-            ->addRememberCacheTag(self::users())
-            ->addFlushCacheTag(self::news());
+        return (new self('a_news'. self::$tagDelimiter . self::getModelKey($key)));
     }
 
     /**
@@ -66,54 +55,42 @@ class TaggedCache
     protected static function getModelKey($key): string
     {
         if (is_subclass_of($key, Model::class)) {
-            return $key->getOriginal($key->getRouteKeyName());
+            return $key->getOriginal($key->getRouteKeyName()) ?? $key->getAttribute($key->getRouteKeyName());
         }
 
         return $key;
     }
 
-    public function __construct($tag)
+    public function __construct(...$tags)
     {
-        $this->basicTag = $tag;
+        $this->tags = $tags;
     }
 
-    public function getBasicTag(): string
+    public function with(TaggedCache $cache)
     {
-        return $this->basicTag;
-    }
-
-    public function addRememberCacheTag(self $cache)
-    {
-        $this->additionalRememberTags[] = $cache->getBasicTag();
+        $this->tags = array_merge($this->tags, $cache->getTags());
 
         return $this;
     }
 
-    public function addFlushCacheTag(self $cache)
+    public function getTags(): array
     {
-        $this->additionalRememberTags[] = $cache->getBasicTag();
-
-        return $this;
+        return $this->tags;
     }
 
     public function remember($key, Closure $callback, $ttl = null)
     {
-        return $this->getCacheForRemember()->remember($key, $ttl ?? $this->getTtl(), $callback);
+        return $this->getCache()->remember($key, $ttl ?? $this->getTtl(), $callback);
     }
 
-    public function flush($withAdditionalTags = true)
+    public function flush()
     {
-        $this->getCacheForFlush($withAdditionalTags)->flush();
+        $this->getCache()->flush();
     }
 
-    protected function getCacheForRemember()
+    protected function getCache(): \Illuminate\Cache\TaggedCache
     {
-        return \Cache::tags(array_merge([$this->basicTag], $this->additionalRememberTags));
-    }
-
-    protected function getCacheForFlush($withAdditionalTags = true)
-    {
-        return \Cache::tags(array_merge([$this->basicTag], $withAdditionalTags ? $this->additionalFlushTags : []));
+        return \Cache::tags($this->tags);
     }
 
     protected function getTtl()

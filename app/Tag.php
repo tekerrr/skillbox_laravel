@@ -4,37 +4,24 @@ namespace App;
 
 use App\Service\TaggedCache;
 
-class Tag extends \Illuminate\Database\Eloquent\Model
+class Tag extends ModelWithCache
 {
     protected $fillable = ['name'];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        // Cache
-        static::created(function () {
-            self::flushCache();
-        });
-
-        static::updated(function () {
-            self::flushCache();
-        });
-
-        static::deleted(function () {
-            self::flushCache();
-        });
-    }
 
     public static function sync($taggable, $newTags)
     {
         $currentTags = $taggable->tags->keyBy('name');
         $newTags = collect($newTags)->keyBy(function ($item) { return $item; });
 
-        $taggable->tags()->attach(Tag::getIds($newTags->diffKeys($currentTags)));
-        $taggable->tags()->detach(Tag::getIds($currentTags->diffKeys($newTags)));
+        $attachedTags = $newTags->diffKeys($currentTags);
+        $detachedTags = $currentTags->diffKeys($newTags);
 
-        self::flushCache();
+        $taggable->tags()->attach(Tag::getIds($attachedTags));
+        $taggable->tags()->detach(Tag::getIds($detachedTags));
+
+        if ($attachedTags->isNotEmpty() || $detachedTags->isNotEmpty()) {
+            self::flushCache();
+        }
     }
 
     protected static function getIds($names)
@@ -59,7 +46,7 @@ class Tag extends \Illuminate\Database\Eloquent\Model
         return $this->morphedByMany(News::class, 'taggable');
     }
 
-    private static function flushCache()
+    protected static function flushCache(ModelWithCache $tag = null)
     {
         TaggedCache::tags()->flush();
     }

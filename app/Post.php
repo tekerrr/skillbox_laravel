@@ -4,7 +4,7 @@ namespace App;
 
 use App\Service\TaggedCache;
 
-class Post extends \Illuminate\Database\Eloquent\Model
+class Post extends ModelWithCache
 {
     use CanBeActivated;
     use CanBeBinding;
@@ -25,19 +25,6 @@ class Post extends \Illuminate\Database\Eloquent\Model
 
         static::deleting(function (Post $post) {
             $post->comments()->delete();
-        });
-
-        // Cache
-        static::created(function () {
-            self::flushCache();
-        });
-
-        static::updated(function (Post $post) {
-            self::flushCache($post);
-        });
-
-        static::deleted(function (Post $post) {
-            self::flushCache($post);
         });
     }
 
@@ -67,13 +54,11 @@ class Post extends \Illuminate\Database\Eloquent\Model
             ->belongsToMany(User::class, 'post_histories')
             ->withPivot(['before', 'after'])
             ->withTimestamps()
-            ->orderByDesc('pivot_created_at')
-        ;
+            ->orderByDesc('pivot_created_at');
     }
 
-    private static function flushCache(Post $post = null)
+    protected static function flushCache(ModelWithCache $post = null)
     {
-        $cache = $post ? TaggedCache::post($post) : TaggedCache::posts();
-        $cache->flush();
+        TaggedCache::post($post)->with(TaggedCache::posts())->flush();
     }
 }

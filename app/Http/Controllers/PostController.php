@@ -19,9 +19,11 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = TaggedCache::posts()->remember('posts|' . page(), function () {
-            return Post::active()->latest()->with('tags')->simplePaginate(10);
-        });
+        $posts = TaggedCache::posts()
+            ->with(TaggedCache::tags())
+            ->remember('posts|' . page(), function () {
+                return Post::active()->latest()->with('tags')->simplePaginate(10);
+            });
 
         return view('posts.index', compact('posts'));
     }
@@ -49,9 +51,12 @@ class PostController extends Controller
     {
 //        \Cache::flush();
 
-        $post = TaggedCache::post($slug)->remember('post|' . $slug, function () use ($slug) {
-            return Post::getBindingModel($slug)->load('tags', 'comments.user', 'history');
-        });
+        $post = TaggedCache::post($slug)
+            ->with(TaggedCache::tags())
+            ->with(TaggedCache::users())
+            ->remember('post|' . $slug, function () use ($slug) {
+                return Post::getBindingModel($slug)->load('tags', 'comments.user', 'history');
+            });
 
         return view('posts.show', compact('post'));
     }
