@@ -2,14 +2,14 @@
 
 namespace App;
 
-use Illuminate\Support\Arr;
+use App\Service\TaggedCache;
 
-class Post extends \Illuminate\Database\Eloquent\Model
+class Post extends ModelWithCache
 {
     use CanBeActivated;
+    use CanBeBinding;
 
     protected $fillable = ['owner_id', 'slug', 'title', 'abstract', 'body', 'is_active'];
-
     protected $casts = ['is_active' => 'boolean'];
 
     protected static function boot()
@@ -19,7 +19,7 @@ class Post extends \Illuminate\Database\Eloquent\Model
         static::updating(function (Post $post) {
             $post->history()->attach(auth()->id(), [
                 'after' => json_encode($after = $post->getDirty()),
-                'before' => json_encode(Arr::only($post->getOriginal(), array_keys($after))),
+                'before' => json_encode(\Arr::only($post->getOriginal(), array_keys($after))),
             ]);
         });
 
@@ -28,6 +28,10 @@ class Post extends \Illuminate\Database\Eloquent\Model
         });
     }
 
+    protected static function flushCache(ModelWithCache $post = null)
+    {
+        TaggedCache::post($post)->with(TaggedCache::posts())->flush();
+    }
 
     public function getRouteKeyName()
     {
@@ -55,8 +59,6 @@ class Post extends \Illuminate\Database\Eloquent\Model
             ->belongsToMany(User::class, 'post_histories')
             ->withPivot(['before', 'after'])
             ->withTimestamps()
-            ->orderByDesc('pivot_created_at')
-        ;
+            ->orderByDesc('pivot_created_at');
     }
-
 }

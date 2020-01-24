@@ -2,11 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Service\TaggedCache;
 
-class News extends Model
+class News extends ModelWithCache
 {
     use CanBeActivated;
+    use CanBeBinding;
 
     protected $fillable = ['slug', 'title', 'abstract', 'body', 'is_active'];
 
@@ -17,6 +18,11 @@ class News extends Model
         static::deleting(function (News $news) {
             $news->comments()->delete();
         });
+    }
+
+    protected static function flushCache(ModelWithCache $aNews = null)
+    {
+        TaggedCache::aNews($aNews)->with(TaggedCache::news())->flush();
     }
 
     public function getRouteKeyName()

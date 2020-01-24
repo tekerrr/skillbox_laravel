@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Service\TaggedCache;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -35,6 +36,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Cache
+        static::updated(function (User $user) {
+            if ($user->isDirty('name')) {
+                self::flushCache();
+            }
+        });
+    }
+
+    protected static function flushCache()
+    {
+        TaggedCache::users()->flush();
+    }
 
     public function roles()
     {
